@@ -1,13 +1,24 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
 entity RX is 
-  Port ( clk : in  STD_LOGIC;
-         reset : in  STD_LOGIC;
-         data_in : in  STD_LOGIC;
-         data_out : out  STD_LOGIC;
-         data_valid : out  STD_LOGIC;
-         data_ready : in  STD_LOGIC);
+  port ( clk : in  std_logic;
+         reset : in  std_logic;
+          RxD : in  std_logic;
+          par_sel : in  std_logic;
+          buad_sel : in  std_logic;
+          fifo_full : out  std_logic;
+          fifo_empty : out  std_logic;
+          data_lost : out  std_logic;
+          parity_err : out  std_logic
+        );
 end RX;
 
 
-
--- case addr 
--- when 100 => 
+architecture RTL of RX is
+  
+begin
+  
+  
+  
+end architecture RTL;
