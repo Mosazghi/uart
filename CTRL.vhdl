@@ -16,8 +16,6 @@ port (
     tx_ready    : in std_logic;
     rx_data    : in std_logic_vector(7 downto 0);
     rx_ready    : in std_logic;
-
-    rd :out std_logic_vector
-    wr :out std_logic_vector
+    data_bus : inout std_logic_vector(13 downto 0); -- rd + wr + addr + data 
 
 end entity CTRL;

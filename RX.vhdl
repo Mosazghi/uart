@@ -15,7 +15,6 @@ entity RX is
         );
 end RX;
 
-
 architecture RTL of RX is
   
 begin
