@@ -49,14 +49,20 @@ architecture RTL of CTRL is
 	-- Signal
 	---------------------------------
 	signal adresse : data_bus(2 downto 0);
-	signal data		: data_bus(7 downto 0);
+	signal data		: data_bus(7 downto 0	);
 	signal state 	: state_type;
+	
+	signal config : (4 downto 0);
+	
 	
 begin
 	process(clk, rst) is begin
 		if (rst = '0') then 
 			state <= Idle; 
 			snd_led <= '1';
+			adr<= "100";
+				data_bus<= config;
+			
 			rx_data <= (others <= '0');
 			tx_data <= (others <= '0');
 			
