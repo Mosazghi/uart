@@ -15,6 +15,9 @@ port (
     -- data_bus 	: inout std_logic_vector(10 downto 0); 	-- rd + wr + addr + data 
     snd_led    : out std_logic;
 	 tx_data    : out std_logic_vector(7 downto 0));
+	 adr : out std_logic_vector(2 downto 0);
+	 rd : out std_logic_vector;
+	 wr : out std_logic_vector;
 	 
 	 /*
     tx_ready   : in std_logic;
@@ -52,7 +55,7 @@ architecture RTL of CTRL is
 	signal data		: data_bus(7 downto 0	);
 	signal state 	: state_type;
 	
-	signal config : (4 downto 0);
+	--signal config : (4 downto 0);
 	
 	
 begin
@@ -60,15 +63,13 @@ begin
 		if (rst = '0') then 
 			state <= Idle; 
 			snd_led <= '1';
+			rd<= '0'
+			wr<= '1'
 			adr<= "100";
-				data_bus<= config;
-				config(2 downto 0) <= baud_sel;
-				config(4 downto 3) <= par_sel;
-				
+				data_bus(2 downto 0) <= baud_sel;
+				data_bus(4 downto 3) <= par_sel;				
 			adr<= "000";
-				data_bus<= config;
-				config(2 downto 0) <= baud_sel;
-				config(4 downto 3) <= par_sel;
+				
 					
 					
 			rx_data <= (others <= '0');
