@@ -11,7 +11,8 @@ entity RX is
           fifo_full : out  std_logic;
           fifo_empty : out  std_logic;
           data_lost : out  std_logic;
-          parity_err : out  std_logic
+          parity_err : out  std_logic;
+			 rx_ready : out std_logic
         );
 end RX;
 
@@ -20,9 +21,11 @@ architecture RTL of RX is
   -- 100 = RxConfig (NA - Parity - Baud)
   -- 101 = RxData (Data out)
   -- 110 = RxStatus (Parity error - Data lost - FIFO full - FIFO empty)
-  signal addr : std_logic_vector :=  data_bus(2 downto 0);
   signal data_out : std_logic_vector :=  data_bus(10 downto 3);
-  -- idk
+  signal full_addr : std_logic_vector :=  data_bus(2 downto 0);
+  signal 
+  
+  -- 
   signal rx_data  : std_logic_vector(7 downto 0);   -- Data read from FIFO
   signal wrreq    : std_logic := '0';               -- Write request to FIFO
   signal rdreq    : std_logic := '0';               -- Read request from FIFO
