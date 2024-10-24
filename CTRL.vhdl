@@ -28,7 +28,7 @@ u_ctrl : CTRL
     port map (
         clk         => clk,
         rst         => rst,
-        snd_led => snd_led,
+        snd_led 	  => snd_led,
         tx_data     => tx_data,               -- Data to be transmitted (loopback)
         rx_data     => rx_data,               -- Data received
         tx_ready    => tx_ready,              -- CTRL indicates when ready for TX
@@ -62,7 +62,15 @@ begin
 			snd_led <= '1';
 			adr<= "100";
 				data_bus<= config;
-			
+				config(2 downto 0) <= baud_sel;
+				config(4 downto 3) <= par_sel;
+				
+			adr<= "000";
+				data_bus<= config;
+				config(2 downto 0) <= baud_sel;
+				config(4 downto 3) <= par_sel;
+					
+					
 			rx_data <= (others <= '0');
 			tx_data <= (others <= '0');
 			
