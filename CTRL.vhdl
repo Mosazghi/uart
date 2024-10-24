@@ -24,6 +24,20 @@ port (
 
 end entity CTRL;	
 
+u_ctrl : CTRL
+    port map (
+        clk         => clk,
+        rst         => rst,
+        snd_led => snd_led,
+        tx_data     => tx_data,               -- Data to be transmitted (loopback)
+        rx_data     => rx_data,               -- Data received
+        tx_ready    => tx_ready,              -- CTRL indicates when ready for TX
+        rx_ready    => rx_ready,              -- Data ready signal from RX module
+        led_ctrl    => led_ctrl,              -- Control LED for data reception
+        baud_sel => baud_sel,           -- Baud rate control signal
+        par_sel => par_sel        -- Parity control signal
+    );
+
 
 architecture RTL of CTRL is
 	---------------------------------
@@ -35,16 +49,17 @@ architecture RTL of CTRL is
 	-- Signal
 	---------------------------------
 	signal adresse : data_bus(2 downto 0);
-	signal data		: data_bus(10 downto 3);
+	signal data		: data_bus(7 downto 0);
 	signal state 	: state_type;
 	
 begin
 	process(clk, rst) is begin
 		if (rst = '0') then 
 			state <= Idle; 
-			snd_led <= '0';
+			snd_led <= '1';
 			rx_data <= (others <= '0');
 			tx_data <= (others <= '0');
+			
 		
 		elsif (rising_edge(clk)) then
 			
@@ -52,6 +67,10 @@ begin
 			
 				when Idle =>
 					if (rx_ready = '1') then
+					
+					
+					
+					
 					end if;
 					
 				when Get =>
@@ -69,3 +88,12 @@ begin
 	
 	
 end architecture
+
+
+
+
+
+
+ 
+
+
