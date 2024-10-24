@@ -22,7 +22,7 @@ port (
 
     rd :out std_logic_vector
     wr :out std_logic_vector
-
+)
 end entity CTRL;
 
 architechture Behavioral
@@ -33,13 +33,14 @@ architechture Behavioral
     signal tx_ready    : std_logic;
     signal rx_ready    : std_logic;
 	 
+	
+    signal snd_led    : std_logic; = '1';
 	 
-    signal snd_led    : std_logic;
+	 
     signal baud_sel : std_logic_vector(2 downto 0);
     signal par_sel : std_logic_vector(1 downto 0);
 	 signal par_err :std_logic_vector;
 	  
-	 
 	 --FI FO FI FUM
 	 
     signal fifo_full   : std_logic;
@@ -59,7 +60,7 @@ begin
     port map (
         clk         => clk,
         rst         => rst,
-        push_button => push_button,
+        snd_led => snd_led,
         tx_data     => tx_data,               -- Data to be transmitted (loopback)
         rx_data     => rx_data,               -- Data received
         tx_ready    => tx_ready,              -- CTRL indicates when ready for TX
@@ -68,3 +69,21 @@ begin
         baud_sel => baud_sel,           -- Baud rate control signal
         par_sel => par_sel        -- Parity control signal
     );
+	 
+	 
+	case parity (par_sel: in std_logic_vector(1 downto 0)) return std_logic_vector is
+	begin
+		case par_sel is
+		
+		when "00" =>         --No 
+
+		when "01" =>         --Even 
+
+		when "10" =>         --Odd 
+	
+	when others  return => --idk    --NA
+	
+	
+	
+	
+	 
