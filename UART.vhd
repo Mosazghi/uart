@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
+use ieee.numeric_std.all;
 
 entity CTRL is
 port (
@@ -17,6 +18,16 @@ port (
     rx_ready   : in std_logic;                            -- RX klar signal
     rd         :out std_logic_vector                      -- Read signal
     wr         :out std_logic_vector			  -- Write signal
-	 ) --test 
+	 );
+	 
 
 end entity CTRL;
+entity URTL is 
+	port ( 
+		clk		:in std_logic;        --clock signal (50MHz)
+		rst		:in std_logic;			--reset signal (KEY0), active LOW
+		RxD		:in std_logic;			--UART received data (input)
+		TxD		:out std_logic;		--UART transmit signal(output)
+		snd		:in std_logic;			--Button to transmit a predefind character, activ LOW
+		snd_led	:out std_logic; 		--LED indicating received/transmitted
+		baud_sel :in std_logic_vector(2 downto 0); --SW0 SW1 SW2
