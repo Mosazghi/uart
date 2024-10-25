@@ -40,13 +40,13 @@ begin
         State <= start;
         snd_led <= '1';
         
-        -- Initialize variables and states
+        -- start verdi
         adr <= (others => '0');
         databus <= (others => '0');
         RxData <= (others => '0');
         TxData <= (others => '0');
-        wr <= '0';  -- Disable write at reset
-        rd <= '0';  -- Disable read at reset
+        wr <= '0';  -- reset write
+        rd <= '0';  -- reset read
         
     elsif rising_edge(clk) then 
         case State is
@@ -86,6 +86,11 @@ begin
 		elsif (rising_edge(clk)) then
 			case State is
 				when Idle =>	
+				adr <= "110"    ------- addresse for hvor den skal lese
+				
+				--rd <= 1;  LESE?
+				
+				
 					-- Sjekker Rx status
 					if 	databus(3 downto 3) = '1' then
 						-- Parity Error
@@ -99,7 +104,11 @@ begin
 					else
 						state <= Idle;
 					end if;
+					---------------------------------------------------------
 					
+				-- SJEKKE TX OGSÅ?
+					
+					--------------------------------------------------------
 				when Get =>
 					adr <= "101";		-- Setter adresse til å motta data fra Rx
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
@@ -107,7 +116,7 @@ begin
 						state <= Send;		-- Setter status til sending
 					else
 						State <= Get;
-					end if;
+					end if;	
 					
 					
 					
