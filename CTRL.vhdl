@@ -17,10 +17,18 @@ end entity CTRL;
 architecture RTL of CTRL is
 	type	 State_Type is (Idle, Get, Send);
 	signal State : State_Type;
+	
+	
+	type startseq is (start, Write_Rx_Config, Write_Tx_Config, Finish);
+	signal State : startseq := start;  -- Initialize to Idle
 
 	signal RxData 	: std_logic_vector(7 downto 0);
 	signal TxData 	: std_logic_vector(7 downto 0);
 	signal adr		: std_logic_vector(2 downto 0);
+	
+	
+	signal sndfor : std_logic_vector = '1'; --- hjelpe signaler for å lage trykk knappen
+	signal sndnaa : std_logic_vector = '0';
 	
 begin
     u_ctrl : CTRL
@@ -81,7 +89,9 @@ begin
                 State <= start;
 				end case;
 			end if;
-		end process;
+
+		
+	
 			
 		elsif (rising_edge(clk)) then
 			case State is
@@ -104,11 +114,7 @@ begin
 					else
 						state <= Idle;
 					end if;
-					---------------------------------------------------------
 					
-				-- SJEKKE TX OGSÅ?
-					
-					--------------------------------------------------------
 				when Get =>
 					adr <= "101";		-- Setter adresse til å motta data fra Rx
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
@@ -121,8 +127,15 @@ begin
 					
 					
 				when Send =>
-					adr <= "010";							-- Sjekker om Tx er klar til å motta data
-					if (databus = "00000000" and snd = '1') then	-- Venter til Tx er klar og sendeknapp er initiert
+				adr <= "010";							-- Sjekker om Tx er klar til å motta data
+				
+				--if databus(0 downto 0)= '1' then
+						-- TX BUSY
+					--else;	SKAL VI HA DETTE SÅNNN AT DEN GJØR NOE VIS DEN ER BUSY?
+
+				
+					sndfor <= snd;
+					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						adr <= "001";							-- Setter adresse for sending av data til Tx
 						databus <= TxData; 					-- Sender data til Tx
 						databus <= (others <= '0');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
@@ -130,6 +143,7 @@ begin
 					else 
 						state <= Send;
 					end if;
+					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
 			end case;
 		end if;
 	end process;
