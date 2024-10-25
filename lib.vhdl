@@ -7,13 +7,11 @@ package uart_library is
   constant TX_CONFIG_A  : std_logic_vector(2 downto 0) := "000";
   constant TX_DATA_A    : std_logic_vector(2 downto 0) := "001";
   constant TX_STATUS_A  : std_logic_vector(2 downto 0) := "010";
-  constant TX_NA_A      : std_logic_vector(2 downto 0) := "011";
 
   -- Address constants for RX registers
   constant RX_CONFIG_A  : std_logic_vector(2 downto 0) := "100";
   constant RX_DATA_A    : std_logic_vector(2 downto 0) := "101";
   constant RX_STATUS_A  : std_logic_vector(2 downto 0) := "110";
-  constant RX_NA_A      : std_logic_vector(2 downto 0) := "111";
 
   -- Index constants for TxCONFIG
   constant TX_PARITY_S  : integer := 4;
