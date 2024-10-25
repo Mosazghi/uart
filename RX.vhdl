@@ -17,15 +17,15 @@ architecture RTL of RX is
   type state_t is (IDLE, START, DATA, STOP);
   signal state : state_t := IDLE;                   -- State machine 
  
-  signal rx_data  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
+  signal rx_data_buf  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
   signal wrreq    : std_logic := '0';               -- Write request to FIFO
   signal rdreq    : std_logic := '0';               -- Read request from 
   signal rx_ready : std_logic := '0';               -- RX ready flag (internal)
   signal rx_done  : std_logic := '0';               -- Indicates a byte has been received
 
   -- Status signals
-  signal fifo_empty : std_logic;                    -- FIFO empty status
-  signal fifo_full  : std_logic;                    -- FIFO full status
+  signal fifo_empty : std_logic := '0';                    -- FIFO empty status
+  signal fifo_full  : std_logic := '0';                    -- FIFO full status
   signal parity_err : std_logic := '0';             -- Parity error flag
   signal data_lost  : std_logic := '0';             -- Data lost flag
 
@@ -37,13 +37,13 @@ begin
     -- FIFO Instance
     i_fifo : entity work.FIFO
         port map (
-            clock => clk,
-            data  => rx_data,           -- Data input to FIFO (received data)
-              rdreq => rdreq,             -- Read request signal
-              wrreq => wrreq,             -- Write request signal
+              clock => clk,
+              data  => rx_data_buf,           -- Data input to FIFO (received data)
+              rdreq => rdreq,             -- Read request signal to FIFO
+              wrreq => wrreq,             -- Write request signal to FIFO
               empty => fifo_empty,        -- FIFO empty status
               full  => fifo_full,         -- FIFO full status
-              q     => data_bus            -- Data output from FIFO
+              q     => data_bus           -- Data output from FIFO
           );
 
     -- Process to receive data 
@@ -55,7 +55,7 @@ begin
                 case state is
                   when IDLE =>
                     if RxD = '0' then
-
+                      rx_ready <= '1';
                       state <= START;
                     end if;
                   when START =>
@@ -75,7 +75,7 @@ begin
                 if rd = '1' then
                   case addr is
                     when RX_DATA_A =>
-                      data_bus <= rx_data;
+                      data_bus <= rx_data_buf;
                     when RX_STATUS_A =>
                       data_bus <= "0000" & parity_err & data_lost & fifo_full & fifo_empty;
                   end case;
