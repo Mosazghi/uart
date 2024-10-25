@@ -17,5 +17,6 @@ port (
     rx_ready   : in std_logic;                            -- RX klar signal
     rd         :out std_logic_vector                      -- Read signal
     wr         :out std_logic_vector			  -- Write signal
+	 ) --test 
 
 end entity CTRL;
