@@ -21,7 +21,7 @@ architecture Behavioral of UART is
 	 signal data_bus		: std_logic_vector(7 downto 0);		-- Shared 8-bit data bus (internal only)
     signal wr         	: std_logic;                        -- Write signal
     signal rd         	: std_logic;    							-- Read signal
-	 signal adr      	: std_logic_vector(2 downto 0);		-- Address for register selection
+	 signal adder      	: std_logic_vector(2 downto 0);		-- Address for register selection
 	
 begin
 		
@@ -35,7 +35,7 @@ begin
             par_sel  => par_sel,
             databus => data_bus,
             snd_led  => snd_led,
-				adr		=> adr,
+				adr		=> adder,
             wr       => wr,
             rd       => rd
 				
@@ -48,7 +48,7 @@ begin
             rst      => rst,
             Rd       => rd,                             -- Read signal from CTRL
             Wr       => wr,                            -- Write signal from CTRL
-            addr     => adr,            					 -- Address for TX registers
+            addr     => adder,            					 -- Address for TX registers
             data_bus => data_bus,                          -- Shared 8-bit data bus
             TxD      => TxD                             -- UART Transmit data output
         );
@@ -60,7 +60,7 @@ begin
             rst_n    => rst,
             RxD      => RxD,                             -- Receive data input
             data_bus => data_bus,                          -- Shared data bus
-            addr     => adr,         					-- Address bus
+            addr     => adder,         					-- Address bus
             Rd       => rd,                             -- Read signal from CTRL
             wr       => wr                             -- Write signal from CTRL
         );
