@@ -171,7 +171,7 @@ begin
 						adr <= "001";							-- Setter adresse for sending av data til Tx
 						RoW('1'); -- skrive
 						databus <= TxData; 					-- Sender data til Tx
-						databus <= (others => '0');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
+						databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
 						state <= Idle;
 					else 
 						state <= Send;
