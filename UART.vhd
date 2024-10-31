@@ -11,7 +11,7 @@ entity UART is
         TxD      : out std_logic;                         -- UART transmit signal(output)
         snd_led  : out std_logic;                         -- LED indicating received/transmitted
         baud_sel : in std_logic_vector(2 downto 0);       -- Baud rate selection SW0, SW1 and  SW2
-        par_sel  : in std_logic_vector(1 downto 0);       -- Parity selection SW3 and SW4
+        par_sel  : in std_logic_vector(1 downto 0)      -- Parity selection SW3 and SW4
         
     );
 end entity UART;
@@ -65,4 +65,5 @@ begin
             wr       => wr                             -- Write signal from CTRL
         );
 end Behavioral;
+
 
