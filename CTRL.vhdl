@@ -33,7 +33,7 @@ architecture RTL of CTRL is
 	signal sndfor : std_logic := '1'; --- hjelpe signaler for å lage trykk knappen
 	signal sndnaa : std_logic := '0';
 	
-	function RoW(num := std_logic) is  -- Is this Read or Write;-;
+	procedure RoW(num : std_logic) is  -- Is this Read or Write;-;
 	begin
 		if (num = '0') then
 			rd <= '1';
@@ -42,7 +42,7 @@ architecture RTL of CTRL is
 			rd <= '0';
 			wr <= '1';
 		end if;
-	end function;
+	end procedure;
 	
 begin
     u_ctrl : CTRL
@@ -106,14 +106,15 @@ begin
                 -- etter inialisering
                 wr <= '0';  -- slutt å skrive
                 databus <= (others => 'Z');
-					 RxData, TxData <= databus;
+					 RxData <= databus; 
+					 TxData <= databus;
                 adr <= (others => '0');
                 State <= Idle;
                 -- addresse bus er tatt til null
 		
 				when Idle =>	
-					adr <= "110"    ------- addresse for hvor den skal lese
-					Row('0'); -- lese
+					adr <= "110";    ------- addresse for hvor den skal lese
+					RoW('0'); -- lese
 				
 					-- Tilbakemelding: bruk en index ikke x downto y for dette. bruk If's for alle. 
 					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
@@ -151,38 +152,26 @@ begin
 					sndfor <= snd;
 					
 					if databus(0 downto 0)= '1' then
-					
+					-- BLINK LED
 					------------------------------------
 						if counter < timer_period then
-						counter  <=	counter +1;
-					
+							counter  <=	counter +1;
 						else 
-						counter <= 0;
-						led_state <= '0';	
+							counter <= 0;
+							led_state <= '0';	
 						end if;
-		
-					else; 
+					else 
 						counter <= 0;
 						led_state <= '1';	
 					end if;
 					
 					snd_led <= led_state;
-					
-					
-					
-						-- BLINK LED
-			
 						-- TX BUSY
-					elsif (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
+					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						adr <= "001";							-- Setter adresse for sending av data til Tx
-						RoW('1') -- skrive
+						RoW('1'); -- skrive
 						databus <= TxData; 					-- Sender data til Tx
-						databus <= (others <= '0');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
-						
-						 if Busy then
-							blink();
-						end if;
-						
+						databus <= (others => '0');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
 						state <= Idle;
 					else 
 						state <= Send;
