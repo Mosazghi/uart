@@ -1,5 +1,6 @@
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 use work.uart_library.all;
 
 entity RX is 
@@ -18,7 +19,6 @@ architecture RTL of RX is
   signal state : state_t := IDLE;                   -- State machine 
  
   signal rx_data_buf  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
-  signal bit_count : integer := 0;                   -- Bit counter 
   signal wrreq    : std_logic := '0';               -- Write request to FIFO
   signal rdreq    : std_logic := '0';               -- Read request from 
   signal rx_ready : std_logic := '0';               -- RX ready flag (internal)
@@ -31,9 +31,18 @@ architecture RTL of RX is
   signal data_lost  : std_logic := '0';             -- Data lost flag
 
   -- Configs signals 
-  signal baud_rate  : std_logic_vector(RX_BAUD_S downto RX_BAUD_E); 
+  signal baud_rate  : integer range 9600 to 115200 := 115200; -- Baud rate
   signal parity     : std_logic_vector(RX_PARITY_S downto RX_PARITY_E); 
   
+  signal baud_divider : integer := 0; 
+  signal baud_tick : std_logic := '0'; 
+  signal baud_counter : integer; 
+
+  signal os_divider : integer := 0; 
+  signal os_tick : std_logic := '0'; 
+  signal os_counter : integer; 
+  signal sample_buf : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for sampling 
+
   function count_ones_middle_six(data : std_logic_vector) return integer is
   variable count : integer := 0;
   begin
@@ -57,52 +66,90 @@ begin
               q     => data_bus           -- Data output from FIFO  endre 
           );
 
-    p_baud : process(clk, rst_n) is
-            begin
-            end process p_baud;
+    p_baud_generator : process(clk, rst_n)
+        begin
+            if rst_n = '0' then
+                baud_counter <= 0;
+                baud_tick <= '0';
+            elsif rising_edge(clk) then
+                if baud_counter = baud_divider - 1 then
+                    baud_tick <= '1'; 
+                    baud_counter <= 0;      
+                else
+                    baud_tick <= '0';
+                    baud_counter <= baud_counter + 1;
+                end if;
+            end if;
+        end process;
+
+        p_os_generator : process(clk, rst_n)
+        begin 
+            if rst_n = '0' then
+              os_counter <= 0;
+              os_tick <= '0';
+            elsif rising_edge(clk) then
+              if os_counter = os_divider - 1 then
+                os_tick <= '1';
+                os_counter <= 0;
+                sample_buf <= sample_buf & RxD;
+              else
+                os_tick <= '0';
+                os_counter <= os_counter + 1;
+                sample_buf <= (others => 'Z');
+              end if;
+            end if;
+        end process;
+            
             
     -- Process to receive data 
     p_main: process(clk, rst_n) is 
-            variable v_majority_bit : std_logic := '0';
-            variable v_sample_buf : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for sampling 
-            variable v_sample_tick : integer range 0 to 7 := 0;                -- Sample tick counter 
-
+            variable v_majority_bit : std_logic := 'Z';
+            variable v_bit_count : integer range 0 to 7 := 0;
             begin
               if rst_n = '0' then
                 -- NOTE: reset something 
               elsif rising_edge(clk) then
-				  --if baud_tick = '1'
-                case state is
-                  when IDLE => -- Wait for start bit (RxD = '0')
-                    if RxD = '0' then
-                      rx_done <= '0';
-                      state <= START;
-                    end if;
-                  when START => -- sample start bit 
-                    v_sample_buf(v_sample_tick) := RxD;
-                    v_sample_tick := v_sample_tick + 1;
-                    if v_sample_tick = 7 then 
-                      if count_ones_middle_six(v_sample_buf) < 3 then -- Start bit verified (num 1's < num 0's)
-                        state <= DATA;
-                        bit_count <= 0;
-                        else  --false start bit 
-                          state <= IDLE;
+                if baud_tick = '1' then
+                  case state is
+                    when IDLE => -- Wait for start bit (RxD = '0')
+                      if RxD = '0' then
+                        rx_done <= '0';
+                        state <= START;
+                      end if;
+                    when START => -- sample start bit 
+                      if os_tick = '1' then 
+                        if count_ones_middle_six(sample_buf) < 3 then -- Start bit verified (# 1's < # 0's)
+                          state <= DATA;
+                          else  --false start bit 
+                            state <= IDLE;
+                        end if; 
                       end if; 
-                        v_sample_tick := 0;
-                        v_sample_buf := (others => '0');
-                    end if; 
-                  when DATA => -- sample data bits 
-                    v_sample_buf(v_sample_tick) := RxD;
-                    v_sample_tick := v_sample_tick + 1;
-                    if v_sample_tick = 7 then 
-                      v_majority_bit :=  '1'  when count_ones_middle_six(v_sample_buf) > 3 else '0';
-                      rx_data_buf(bit_count) <= v_majority_bit;
-                      wrreq <= '1';  
-                      bit_count <= bit_count + 1;
-                    end if;
-                  when STOP => --sample stop bit 
-                end case;
-                            
+                    when DATA => -- sample data bits 
+                      if os_tick = '1' then 
+                        if count_ones_middle_six(sample_buf) > 3 then -- Data bit verified (# 1's > # 0's)
+                          v_majority_bit := '1';
+                          else  
+                          v_majority_bit := '0';
+                        end if;
+                        rx_data_buf(v_bit_count) <= v_majority_bit;
+                        wrreq <= '1';  
+                        v_bit_count := v_bit_count + 1;
+                      end if;
+
+                      if v_bit_count = 7 then
+                        state <= STOP;
+                      end if;
+
+                    when STOP => --sample stop bit 
+                      if os_tick = '1' then 
+                        if count_ones_middle_six(sample_buf) > 3 then -- Stop bit verified (# 1's > # 0's)
+                          state <= IDLE;
+                          else  --false stop bit 
+                            state <= IDLE;
+                        end if; 
+                      end if; 
+                  end case;
+                end if; 
               end if;
             end process p_main;
 
@@ -124,8 +171,10 @@ begin
                 if wr = '1' then
                   case addr is
                     when RX_CONFIG_A =>
-                      baud_rate <= data_bus(RX_BAUD_S downto RX_BAUD_E);
+                      baud_rate <= to_integer(unsigned(data_bus(RX_BAUD_S downto RX_BAUD_E)));
                       parity <= data_bus(RX_PARITY_S downto RX_PARITY_E);
+                      baud_divider <= CLOCK_FREQ_HZ/baud_rate; 
+                      os_divider <= baud_divider/8; 
                     when others =>
                       null; -- FIXME: ignore for now 
                   end case;

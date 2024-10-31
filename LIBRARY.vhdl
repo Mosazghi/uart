@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 package uart_library is
-
+	constant CLOCK_FREQ_HZ : integer := 50_000_000/10; 
   -- Address constants for TX registers
   constant TX_CONFIG_A  : std_logic_vector(2 downto 0) := "000";
   constant TX_DATA_A    : std_logic_vector(2 downto 0) := "001";
