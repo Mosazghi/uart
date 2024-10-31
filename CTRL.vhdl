@@ -25,6 +25,9 @@ architecture RTL of CTRL is
 	signal RxData 	: std_logic_vector(7 downto 0);
 	signal TxData 	: std_logic_vector(7 downto 0);
 	signal adr		: std_logic_vector(2 downto 0);
+	constant timer_period : integer := 50000000 / 20;  
+	signal led_c : std_logic := '1'; 
+	
 	
 	
 	signal sndfor : std_logic := '1'; --- hjelpe signaler for å lage trykk knappen
@@ -53,12 +56,21 @@ begin
         baud_sel => baud_sel,           -- Baud rate control signal
         par_sel => par_sel        -- Parity control signal
     );
+	 
+	 
+	
+	
+	
 
 process (clk, rst) --- konfiguerer rx og tx ved start
 begin
     if (rst = '0') then
         State <= start;
-        snd_led <= '1';
+		  
+        led_state <= '1'; ---- led på / default
+        
+		  
+		  
         
         -- start verdi
         adr 		<= (others => '0');
@@ -67,6 +79,7 @@ begin
         TxData 	<= (others => '0');
         wr <= '0';  -- reset write
         rd <= '0';  -- reset read
+		  
         
     elsif rising_edge(clk) then
         case State is
@@ -138,7 +151,27 @@ begin
 					sndfor <= snd;
 					
 					if databus(0 downto 0)= '1' then
+					
+					------------------------------------
+						if counter < timer_period then
+						counter  <=	counter +1;
+					
+						else 
+						counter <= 0;
+						led_state <= '0';	
+						end if;
+		
+					else; 
+						counter <= 0;
+						led_state <= '1';	
+					end if;
+					
+					snd_led <= led_state;
+					
+					
+					
 						-- BLINK LED
+			
 						-- TX BUSY
 					elsif (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						adr <= "001";							-- Setter adresse for sending av data til Tx
