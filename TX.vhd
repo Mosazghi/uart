@@ -49,7 +49,7 @@ begin
 	 -- Process for Baud 
 	p_baud : process(clk, rst)
     begin
-        if rst_n = '0' then
+        if rst = '0' then
             baud_counter <= 0;
             baud_tick <= '0';
         elsif rising_edge(clk) then
