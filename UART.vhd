@@ -36,7 +36,6 @@ begin
             par_sel  => par_sel,
             databus 	=> data_bus,
             snd_led  => snd_led,
-				addr 		=> addr, 
             wr       => wr,
             rd       => rd
 				
@@ -51,7 +50,7 @@ begin
             Wr       => wr,                            -- Write signal from CTRL
             addr     => addr,            					 -- Address for TX registers
             data_bus => data_bus,                          -- Shared 8-bit data bus
-            TxD      => TxD                             -- UART Transmit data output
+            TxD      => TxD                            -- UART Transmit data output
         );
 
     -- RX module
