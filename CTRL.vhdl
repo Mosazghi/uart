@@ -80,13 +80,20 @@ begin
             when Finish =>
                 -- etter inialisering
                 wr <= '0';  -- slutt å skrive
-                databus <= (others => '0');
-					 RxData, TxData <= databus;
-                adr <= (others => '0');
-                State <= start;
+                databus <= (others => 'Z');
+					 TxData <= databus;
+					 RxData <= databus;
+                adr <= (others => '0');'
+					 
+                State <= Init;
+					 
+					 
+				when Init =>
+					-- skal bare gjøres en gang så den slutter her
+					
                 -- addresse bus er tatt til null
             when others =>
-                State <= start;
+                State <= Init;
 				end case;
 			end if;
 
@@ -98,7 +105,7 @@ begin
 				when Idle =>	
 				adr <= "110"    ------- addresse for hvor den skal lese
 				
-				--rd <= 1;  LESE?
+				rd <= 1;   
 				
 				
 					-- Sjekker Rx status
@@ -109,6 +116,10 @@ begin
 					elsif databus(1 downto 1) = '1' then
 						-- FIFO Full
 						State <= Get;
+						--- lage timer her
+						
+						
+						
 					elsif databus(0 downto 0) = '1' then
 						-- FIFO Empty
 					else
@@ -116,6 +127,9 @@ begin
 					end if;
 					
 				when Get =>
+				
+				---  ELLER HER
+			
 					adr <= "101";		-- Setter adresse til å motta data fra Rx
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
 						TxData <= databus;	-- Gjør dataen klar for sending til Tx
@@ -135,6 +149,7 @@ begin
 
 				
 					sndfor <= snd;
+					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
 					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						adr <= "001";							-- Setter adresse for sending av data til Tx
 						databus <= TxData; 					-- Sender data til Tx
@@ -143,7 +158,7 @@ begin
 					else 
 						state <= Send;
 					end if;
-					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
+					
 			end case;
 		end if;
 	end process;
