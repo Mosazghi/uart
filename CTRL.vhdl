@@ -27,8 +27,19 @@ architecture RTL of CTRL is
 	signal adr		: std_logic_vector(2 downto 0);
 	
 	
-	signal sndfor : std_logic_vector := '1'; --- hjelpe signaler for å lage trykk knappen
-	signal sndnaa : std_logic_vector := '0';
+	signal sndfor : std_logic := '1'; --- hjelpe signaler for å lage trykk knappen
+	signal sndnaa : std_logic := '0';
+	
+	function RoW(num := std_logic) is  -- Is this Read or Write;-;
+	begin
+		if (num = '0') then
+			rd <= '1';
+			wr <= '0';
+		else 
+			rd <= '0';
+			wr <= '1';
+		end if;
+	end function;
 	
 begin
     u_ctrl : CTRL
@@ -51,7 +62,7 @@ begin
         
         -- start verdi
         adr 		<= (others => '0');
-        databus	<= (others => '0');
+        databus	<= (others => 'Z');
         RxData 	<= (others => '0');
         TxData 	<= (others => '0');
         wr <= '0';  -- reset write
@@ -66,7 +77,7 @@ begin
                 RxData(2 downto 0) <= baud_sel;
                 RxData(4 downto 3) <= par_sel;
                 databus <= RxData;
-                wr <= '1';  -- skrive
+                Row(1); -- skrive
                 State <= Write_Tx_Config;
             
             when Write_Tx_Config =>
@@ -75,7 +86,7 @@ begin
                 TxData(2 downto 0) <= baud_sel;
                 TxData(4 downto 3) <= par_sel;
                 databus <= TxData;
-                wr <= '1';  -- skrive
+                RoW(1);  -- skrive
                 State <= Finish;
             
             when Finish =>
@@ -89,8 +100,7 @@ begin
 		
 				when Idle =>	
 					adr <= "110"    ------- addresse for hvor den skal lese
-				
-					rd <= 1; 
+					Row('0'); -- lese
 				
 					-- Tilbakemelding: bruk en index ikke x downto y for dette. bruk If's for alle. 
 					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
@@ -111,6 +121,8 @@ begin
 					
 				when Get =>
 					adr <= "101";		-- Setter adresse til å motta data fra Rx
+					RoW('0'); -- lese
+					
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
 						TxData <= databus;	-- Gjør dataen klar for sending til Tx
 						state <= Send;		-- Setter status til sending
@@ -122,20 +134,26 @@ begin
 					
 				when Send =>
 					adr <= "010";							-- Sjekker om Tx er klar til å motta data
-				
-					--if databus(0 downto 0)= '1' then
-						-- TX BUSY
-					--else;	SKAL VI HA DETTE SÅNNN AT DEN GJØR NOE VIS DEN ER BUSY?
-
-					-- Tilbakemelding: husk å sjekke tx_busy osv før man sender 
+					RoW('0'); -- lese
 					sndfor <= snd;
-					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
+					
+					if databus(0 downto 0)= '1' then
+						-- BLINK LED
+						-- TX BUSY
+					elsif (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						adr <= "001";							-- Setter adresse for sending av data til Tx
+						RoW('1') -- skrive
 						databus <= TxData; 					-- Sender data til Tx
 						databus <= (others <= '0');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
+						
+						 if Busy then
+							blink();
+						end if;
+						
 						state <= Idle;
 					else 
 						state <= Send;
+					-- Tilbakemelding: husk å sjekke tx_busy osv før man sender
 					end if;
 					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
 			end case;
