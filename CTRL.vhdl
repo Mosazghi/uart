@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity CTRL is port(
+entity ProjectUART is port( -- CTRL byttet med ProjectUART
 	clk 		: in 		std_logic;
 	rst		: in 		std_logic; 
 	snd		: in 		std_logic;
@@ -12,9 +12,9 @@ entity CTRL is port(
 	snd_led	: out 	std_logic;
 	wr 		: out 	std_logic;
 	rd 		: out 	std_logic);
-end entity CTRL;
+end entity;
 
-architecture RTL of CTRL is
+architecture RTL of ProjectUART is -- CTRL byttet med ProjectUART
 	type	 State_Type is (Start, Write_Tx_Config, Finish, Idle, Get, Send);
 	signal State : State_Type;
 	
@@ -22,11 +22,12 @@ architecture RTL of CTRL is
 	--type startseq is (start, Write_Rx_Config, Write_Tx_Config, Finish);
 	--signal State_init : startseq := start;  -- Initialize to Idle
 
-	signal RxData 	: std_logic_vector(7 downto 0);
-	signal TxData 	: std_logic_vector(7 downto 0);
-	signal adr		: std_logic_vector(2 downto 0);
+	signal RxData 		: std_logic_vector(7 downto 0);
+	signal TxData 		: std_logic_vector(7 downto 0);
+	signal adr			: std_logic_vector(2 downto 0);
+	signal led_state	: std_logic := '1'; 
+	signal counter		: integer := 0;
 	constant timer_period : integer := 50000000 / 20;  
-	signal led_c : std_logic := '1'; 
 	
 	
 	
@@ -45,7 +46,8 @@ architecture RTL of CTRL is
 	end procedure;
 	
 begin
-    u_ctrl : CTRL
+
+    /*u_ctrl : ProjectUART
     port map (
         clk         => clk,
         rst         => rst,
@@ -56,7 +58,7 @@ begin
         baud_sel => baud_sel,           -- Baud rate control signal
         par_sel => par_sel        -- Parity control signal
     );
-	 
+	 */
 	 
 	
 	
@@ -68,9 +70,6 @@ begin
         State <= start;
 		  
         led_state <= '1'; ---- led på / default
-        
-		  
-		  
         
         -- start verdi
         adr 		<= (others => '0');
@@ -87,10 +86,12 @@ begin
             when start =>
                 --konfigurerer rx
                 adr <= "100";  -- Addresse rx
+					 
+					 databus <= ("00000" & adr);
                 RxData(2 downto 0) <= baud_sel;
                 RxData(4 downto 3) <= par_sel;
                 databus <= RxData;
-                Row(1); -- skrive
+                Row('1'); -- skrive
                 State <= Write_Tx_Config;
             
             when Write_Tx_Config =>
@@ -99,7 +100,7 @@ begin
                 TxData(2 downto 0) <= baud_sel;
                 TxData(4 downto 3) <= par_sel;
                 databus <= TxData;
-                RoW(1);  -- skrive
+                RoW('1');  -- skrive
                 State <= Finish;
             
             when Finish =>
@@ -120,14 +121,14 @@ begin
 					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
 					
 					-- Sjekker Rx status 
-					if 	databus(3 downto 3) = '1' then
+					if 	(databus(3) = '1') then
 						-- Parity Error
-					elsif databus(2 downto 2) = '1' then
+					elsif (databus(2) = '1') then
 						-- Data Lost
-					elsif databus(1 downto 1) = '1' then
+					elsif (databus(1) = '1') then
 						-- FIFO Full
 						State <= Get;
-					elsif databus(0 downto 0) = '1' then
+					elsif (databus(0) = '1') then
 						-- FIFO Empty
 					else
 						state <= Idle;
@@ -151,7 +152,7 @@ begin
 					RoW('0'); -- lese
 					sndfor <= snd;
 					
-					if databus(0 downto 0)= '1' then
+					if (databus(0)= '1') then
 					-- BLINK LED
 					------------------------------------
 						if counter < timer_period then
