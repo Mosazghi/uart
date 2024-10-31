@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity ProjectUART is port( -- CTRL byttet med ProjectUART
+entity CTRL is port(
 	clk 		: in 		std_logic;
 	rst		: in 		std_logic; 
 	snd		: in 		std_logic;
@@ -14,7 +14,7 @@ entity ProjectUART is port( -- CTRL byttet med ProjectUART
 	rd 		: out 	std_logic);
 end entity;
 
-architecture RTL of ProjectUART is -- CTRL byttet med ProjectUART
+architecture RTL of CTRL is
 	type	 State_Type is (Start, Write_Tx_Config, Finish, Idle, Get, Send);
 	signal State : State_Type;
 	
@@ -24,7 +24,7 @@ architecture RTL of ProjectUART is -- CTRL byttet med ProjectUART
 
 	signal RxData 		: std_logic_vector(7 downto 0);
 	signal TxData 		: std_logic_vector(7 downto 0);
-	signal adr			: std_logic_vector(2 downto 0);
+	signal addr			: std_logic_vector(2 downto 0);
 	signal led_state	: std_logic := '1'; 
 	signal counter		: integer := 0;
 	constant timer_period : integer := 50000000 / 20;  
@@ -47,7 +47,7 @@ architecture RTL of ProjectUART is -- CTRL byttet med ProjectUART
 	
 begin
 
-    /*u_ctrl : ProjectUART
+    u_ctrl : CTRL
     port map (
         clk         => clk,
         rst         => rst,
@@ -58,7 +58,7 @@ begin
         baud_sel => baud_sel,           -- Baud rate control signal
         par_sel => par_sel        -- Parity control signal
     );
-	 */
+	 
 	 
 	
 	
@@ -72,7 +72,7 @@ begin
         led_state <= '1'; ---- led på / default
         
         -- start verdi
-        adr 		<= (others => '0');
+        addr 		<= (others => '0');
         databus	<= (others => 'Z');
         RxData 	<= (others => '0');
         TxData 	<= (others => '0');
@@ -85,9 +85,9 @@ begin
         
             when start =>
                 --konfigurerer rx
-                adr <= "100";  -- Addresse rx
+                addr <= "100";  -- Addresse rx
 					 
-					 databus <= ("00000" & adr);
+					 databus <= ("00000" & addr);
                 RxData(2 downto 0) <= baud_sel;
                 RxData(4 downto 3) <= par_sel;
                 databus <= RxData;
@@ -96,7 +96,7 @@ begin
             
             when Write_Tx_Config =>
                 --konfigurerer tx
-                adr <= "000";  -- Addresse  Tx 
+                addr <= "000";  -- Addresse  Tx 
                 TxData(2 downto 0) <= baud_sel;
                 TxData(4 downto 3) <= par_sel;
                 databus <= TxData;
@@ -109,12 +109,12 @@ begin
                 databus <= (others => 'Z');
 					 RxData <= databus; 
 					 TxData <= databus;
-                adr <= (others => '0');
+                addr <= (others => '0');
                 State <= Idle;
                 -- addresse bus er tatt til null
 		
 				when Idle =>	
-					adr <= "110";    ------- addresse for hvor den skal lese
+					addr <= "110";    ------- addresse for hvor den skal lese
 					RoW('0'); -- lese
 				
 					-- Tilbakemelding: bruk en index ikke x downto y for dette. bruk If's for alle. 
@@ -135,7 +135,7 @@ begin
 					end if;
 					
 				when Get =>
-					adr <= "101";		-- Setter adresse til å motta data fra Rx
+					addr <= "101";		-- Setter addresse til å motta data fra Rx
 					RoW('0'); -- lese
 					
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
@@ -148,7 +148,7 @@ begin
 					
 					
 				when Send =>
-					adr <= "010";							-- Sjekker om Tx er klar til å motta data
+					addr <= "010";							-- Sjekker om Tx er klar til å motta data
 					RoW('0'); -- lese
 					sndfor <= snd;
 					
@@ -169,7 +169,7 @@ begin
 					snd_led <= led_state;
 						-- TX BUSY
 					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
-						adr <= "001";							-- Setter adresse for sending av data til Tx
+						addr <= "001";							-- Setter addresse for sending av data til Tx
 						RoW('1'); -- skrive
 						databus <= TxData; 					-- Sender data til Tx
 						databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
