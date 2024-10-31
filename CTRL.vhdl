@@ -98,14 +98,15 @@ begin
 				when Idle =>	
 				adr <= "110"    ------- addresse for hvor den skal lese
 				
-				--rd <= 1;  LESE?
+				rd <= 1; 
 				
-				
-					-- Sjekker Rx status
+					-- Tilbakemelding: bruk en index ikke x downto y for dette. bruk If's for alle. 
+					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand. 
+					-- Sjekker Rx status 
 					if 	databus(3 downto 3) = '1' then
 						-- Parity Error
 					elsif databus(2 downto 2) = '1' then
-						-- Data Lost
+--						-- Data Lost
 					elsif databus(1 downto 1) = '1' then
 						-- FIFO Full
 						State <= Get;
@@ -133,7 +134,7 @@ begin
 						-- TX BUSY
 					--else;	SKAL VI HA DETTE SÅNNN AT DEN GJØR NOE VIS DEN ER BUSY?
 
-				
+					-- Tilbakemelding: husk å sjekke tx_busy osv før man sender 
 					sndfor <= snd;
 					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						adr <= "001";							-- Setter adresse for sending av data til Tx
