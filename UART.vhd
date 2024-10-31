@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use work.uart_library.all;
 
 
 entity UART is
@@ -35,7 +36,6 @@ begin
             par_sel  => par_sel,
             databus => data_bus,
             snd_led  => snd_led,
-				adr		=> adder,
             wr       => wr,
             rd       => rd
 				

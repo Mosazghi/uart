@@ -4,6 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.uart_library.all;
 
 
 -- Entity of testbench (empty)
@@ -17,7 +18,6 @@ architecture SimulationModel of TX_tb is
   -- Constant declarations
   ----------------------------------------------------------------------------- 
   constant CLK_FREQ_HZ : integer := 50000000;  
-  constant BAUD_RATE : integer := 115200;
   constant CLK_PER : time := 20 ns;
   constant delay : time := 100 ns;
 
@@ -56,7 +56,7 @@ architecture SimulationModel of TX_tb is
     signal tx_busy : std_logic := '0'; 
 
     -- Config signals
-    signal baud_rate  : std_logic_vector(TX_BAUD_S downto TX_BAUD_E); 
+    signal baud_rate  : integer range 9600 to 115200 := 115200; -- Baud rate
     signal parity     : std_logic_vector(TX_PARITY_S downto TX_PARITY_E); 
 	 
 	 -- Baud configs

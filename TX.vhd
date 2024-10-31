@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.uart_library.all;
 
+
 entity TX is
     port(
         clk : in std_logic;
@@ -34,7 +35,7 @@ architecture RTL of TX is
     signal tx_busy : std_logic := '0'; 
 
     -- Config signals
-    signal baud_rate  : std_logic_vector(TX_BAUD_S downto TX_BAUD_E); 
+    signal baud_rate  : integer range 9600 to 115200 := 115200; -- Baud rate
     signal parity     : std_logic_vector(TX_PARITY_S downto TX_PARITY_E); 
 	 
 	 -- Baud configs
@@ -126,7 +127,7 @@ begin
         if rst = '0' then
           
             data_out <= (others => '0');
-            baud_rate <= (others => '0');
+            baud_rate <= 115200; 
             parity <= (others => '0');
             
         elsif rising_edge(clk) then
@@ -144,8 +145,9 @@ begin
             if Wr = '1' then
                 case addr is
                     when TX_CONFIG_A =>
-                        baud_rate <= data_bus(TX_BAUD_S downto TX_BAUD_E);
+                      baud_rate <= to_integer(unsigned(data_bus(TX_BAUD_S downto TX_BAUD_E)));
                         parity <= data_bus(TX_PARITY_S downto TX_PARITY_E);
+                        baud_divider <= CLOCK_FREQ_HZ / baud_rate;
 						  when TX_DATA_A =>
                         data_out <= tx_data;  
                     when others =>
@@ -154,5 +156,4 @@ begin
             end if;
         end if;
     end process p_ctrl;
-baud_divider <= CLOCK_FREQ_HZ / baud_rate;
 end architecture RTL;
