@@ -11,6 +11,7 @@ entity CTRL is port(
 	databus	: inout 	std_logic_vector(7 downto 0);
 	snd_led	: out 	std_logic;
 	wr 		: out 	std_logic;
+	adr		: out    std_logic_vector(2 downto 0);
 	rd 		: out 	std_logic);
 end entity CTRL;
 
@@ -24,7 +25,6 @@ architecture RTL of CTRL is
 
 	signal RxData 	: std_logic_vector(7 downto 0);
 	signal TxData 	: std_logic_vector(7 downto 0);
-	signal adr		: std_logic_vector(2 downto 0);
 	constant timer_period : integer := 50000000 / 20;  
 	signal led_c : std_logic := '1'; 
 	
