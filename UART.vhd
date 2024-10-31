@@ -33,9 +33,9 @@ begin
             snd      => snd,
             baud_sel => baud_sel,
             par_sel  => par_sel,
-            data_bus => data_bus,
+            databus => data_bus,
             snd_led  => snd_led,
-				adder		=> adder,
+				adr		=> adder,
             wr       => wr,
             rd       => rd
 				
