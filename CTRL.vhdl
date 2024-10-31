@@ -50,19 +50,7 @@ architecture RTL of CTRL is
 	
 begin
 
-    u_ctrl : CTRL
-    port map (
-        clk       => clk,
-        rst       => rst,
-        snd			=> snd,
-        snd_led   => snd_led,              -- Control LED for data reception
-        baud_sel 	=> baud_sel,           -- Baud rate control signal
-        par_sel	=> par_sel,        -- Parity control signal
-		  addr		=> addr
-		  --tx_ready    => tx_ready,              -- CTRL indicates when ready for TX
-        --rx_ready    => rx_ready,              -- Data ready signal from RX module  
-    );
-	
+
 
 process (clk, rst) --- konfiguerer rx og tx ved start
 begin

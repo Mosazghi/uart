@@ -88,7 +88,7 @@ begin
                     elsif Rd = '1' then
                         case addr is
                             when TX_STATUS_A =>
-                                data_out <= "000000" & tx_busy;
+                                data_out <= "0000000" & tx_busy;
                             when TX_CONFIG_A =>
                                 data_out <= (others => '0');  
                             when others =>
@@ -135,7 +135,7 @@ begin
 				if Rd = '1' then
 					case addr is
 						when TX_STATUS_A =>
-							data_out <= "000000" & tx_busy; 
+							data_out <= "0000000" & tx_busy; 
 						when others =>
 							data_out <= (others => '0'); 
 					end case;
