@@ -18,6 +18,9 @@ architecture RTL of RX is
   signal state : state_t := IDLE;                   -- State machine 
  
   signal rx_data_buf  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
+  signal sample_buf : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for sampling 
+  signal sample_tick : integer := 0;                -- Sample tick counter 
+  signal bit_count : integer := 0;                   -- Bit counter 
   signal wrreq    : std_logic := '0';               -- Write request to FIFO
   signal rdreq    : std_logic := '0';               -- Read request from 
   signal rx_ready : std_logic := '0';               -- RX ready flag (internal)
@@ -33,6 +36,16 @@ architecture RTL of RX is
   signal baud_rate  : std_logic_vector(RX_BAUD_S downto RX_BAUD_E); 
   signal parity     : std_logic_vector(RX_PARITY_S downto RX_PARITY_E); 
   
+  function count_ones_middle_six(data : std_logic_vector) return integer is
+  variable count : integer := 0;
+  begin
+    for i in 1 to 6 loop
+      if data(i) = '1' then
+      count := count + 1;
+      end if;
+    end loop;
+    return count;
+  end function;
 begin
     -- FIFO Instance
     i_fifo : entity work.FIFO
@@ -48,19 +61,45 @@ begin
 
     -- Process to receive data 
     p_main: process(clk, rst_n) is 
+            variable sample_count : integer := 0; 
+            variable num_middle_ones : integer := 0;
+            variable majority_bit : std_logic := '0';
+
             begin
               if rst_n = '0' then
                 -- NOTE: reset something 
               elsif rising_edge(clk) then
                 case state is
-                  when IDLE =>
+                  when IDLE => -- Wait for start bit (RxD = '0')
                     if RxD = '0' then
-                      rx_ready <= '1';
+                      rx_done <= '0';
                       state <= START;
                     end if;
-                  when START =>
-                  when DATA =>
-                  when STOP =>
+                  when START => -- sample start bit 
+                    sample_buf(sample_tick) <= RxD;
+                    sample_tick <= sample_tick + 1;
+                    if sample_tick = 7 then 
+                      num_middle_ones := count_ones_middle_six(sample_buf);
+                      if num_middle_ones < 3 then -- Start bit verified (num 1's < num 0's)
+                        state <= DATA;
+                        bit_count <= 0;
+                        else  --false start bit 
+                          state <= IDLE;
+                      end if; 
+                        sample_tick <= 0;
+                        sample_buf <= (others => '0');
+                    end if; 
+                  when DATA => -- sample data bits 
+                    sample_buf(sample_tick) <= RxD;
+                    sample_tick <= sample_tick + 1;
+                    if sample_tick = 7 then 
+                      majority_bit :=  '1'  when count_ones_middle_six(sample_buf) > 3 else '0';
+                      rx_data_buf(bit_count) <= majority_bit;
+                      wrreq <= '1';  
+                      bit_count <= bit_count + 1;
+
+                    end if;
+                  when STOP => --sample stop bit 
                 end case;
                             
               end if;
