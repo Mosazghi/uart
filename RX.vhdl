@@ -4,6 +4,9 @@ use ieee.numeric_std.all;
 use work.uart_library.all;
 
 entity RX is 
+  generic (
+            OVERSAMPLING_FACTOR : integer := 8
+          );
     port( clk : in  std_logic;
           rst_n : in  std_logic;
           RxD : in  std_logic;
@@ -174,7 +177,7 @@ begin
                       baud_rate <= to_integer(unsigned(data_bus(RX_BAUD_S downto RX_BAUD_E)));
                       parity <= data_bus(RX_PARITY_S downto RX_PARITY_E);
                       baud_divider <= CLOCK_FREQ_HZ/baud_rate; 
-                      os_divider <= baud_divider/8; 
+                      os_divider <= baud_divider/OVERSAMPLING_FACTOR;
                     when others =>
                       null; -- FIXME: ignore for now 
                   end case;
