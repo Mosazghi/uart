@@ -9,26 +9,26 @@ entity CTRL is port(
 	baud_sel	: in 		std_logic_vector(2 downto 0);
 	par_sel	: in 		std_logic_vector(1 downto 0);
 	databus	: inout 	std_logic_vector(7 downto 0);
-	snd_led	: out 	std_logic);
-	wr : out std_logic);
-	rd : out std_logic);
+	snd_led	: out 	std_logic;
+	wr 		: out 	std_logic;
+	rd 		: out 	std_logic);
 end entity CTRL;
 
 architecture RTL of CTRL is
-	type	 State_Type is (Idle, Get, Send);
+	type	 State_Type is (Start, Write_Tx_Config, Finish, Idle, Get, Send);
 	signal State : State_Type;
 	
 	
-	type startseq is (start, Write_Rx_Config, Write_Tx_Config, Finish);
-	signal State : startseq := start;  -- Initialize to Idle
+	--type startseq is (start, Write_Rx_Config, Write_Tx_Config, Finish);
+	--signal State_init : startseq := start;  -- Initialize to Idle
 
 	signal RxData 	: std_logic_vector(7 downto 0);
 	signal TxData 	: std_logic_vector(7 downto 0);
 	signal adr		: std_logic_vector(2 downto 0);
 	
 	
-	signal sndfor : std_logic_vector = '1'; --- hjelpe signaler for å lage trykk knappen
-	signal sndnaa : std_logic_vector = '0';
+	signal sndfor : std_logic_vector := '1'; --- hjelpe signaler for å lage trykk knappen
+	signal sndnaa : std_logic_vector := '0';
 	
 begin
     u_ctrl : CTRL
@@ -42,6 +42,7 @@ begin
         baud_sel => baud_sel,           -- Baud rate control signal
         par_sel => par_sel        -- Parity control signal
     );
+
 process (clk, rst) --- konfiguerer rx og tx ved start
 begin
     if (rst = '0') then
@@ -49,14 +50,14 @@ begin
         snd_led <= '1';
         
         -- start verdi
-        adr <= (others => '0');
-        databus <= (others => '0');
-        RxData <= (others => '0');
-        TxData <= (others => '0');
+        adr 		<= (others => '0');
+        databus	<= (others => '0');
+        RxData 	<= (others => '0');
+        TxData 	<= (others => '0');
         wr <= '0';  -- reset write
         rd <= '0';  -- reset read
         
-    elsif rising_edge(clk) then 
+    elsif rising_edge(clk) then
         case State is
         
             when start =>
@@ -80,33 +81,25 @@ begin
             when Finish =>
                 -- etter inialisering
                 wr <= '0';  -- slutt å skrive
-                databus <= (others => '0');
+                databus <= (others => 'Z');
 					 RxData, TxData <= databus;
                 adr <= (others => '0');
-                State <= start;
+                State <= Idle;
                 -- addresse bus er tatt til null
-            when others =>
-                State <= start;
-				end case;
-			end if;
-
 		
-	
-			
-		elsif (rising_edge(clk)) then
-			case State is
 				when Idle =>	
-				adr <= "110"    ------- addresse for hvor den skal lese
+					adr <= "110"    ------- addresse for hvor den skal lese
 				
-				rd <= 1; 
+					rd <= 1; 
 				
 					-- Tilbakemelding: bruk en index ikke x downto y for dette. bruk If's for alle. 
-					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand. 
+					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
+					
 					-- Sjekker Rx status 
 					if 	databus(3 downto 3) = '1' then
 						-- Parity Error
 					elsif databus(2 downto 2) = '1' then
---						-- Data Lost
+						-- Data Lost
 					elsif databus(1 downto 1) = '1' then
 						-- FIFO Full
 						State <= Get;
@@ -128,9 +121,9 @@ begin
 					
 					
 				when Send =>
-				adr <= "010";							-- Sjekker om Tx er klar til å motta data
+					adr <= "010";							-- Sjekker om Tx er klar til å motta data
 				
-				--if databus(0 downto 0)= '1' then
+					--if databus(0 downto 0)= '1' then
 						-- TX BUSY
 					--else;	SKAL VI HA DETTE SÅNNN AT DEN GJØR NOE VIS DEN ER BUSY?
 
