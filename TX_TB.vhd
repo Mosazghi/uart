@@ -18,7 +18,8 @@ architecture SimulationModel of TX_tb is
   ----------------------------------------------------------------------------- 
   constant CLK_FREQ_HZ : integer := 50000000;  
   constant BAUD_RATE : integer := 115200;
-  constant CLK_PER : time := 20 ns;          
+  constant CLK_PER : time := 20 ns;
+  constant delay : time := 100 ns;
 
   -- Calculate the baud divider
   constant baud_divider : integer := CLK_FREQ_HZ / BAUD_RATE;
@@ -100,9 +101,9 @@ begin
 	begin
 		
 		rst <= '1';
-		wait for 100 ns;
+		wait for delay;
 		rst <= '0';
-		wait for 100 ns;
+		wait for delay;
 		
 		-- Write config (TxConfig)
 		data_bus_driver <= "00001010"; --Example
@@ -110,7 +111,7 @@ begin
 		Wr <= '1';
 		wait for CLK_PER;
 		Wr <= '0';
-		wait for 100 ns;
+		wait for delay;
 		
 		--Write Data to Transmit (TxData)
 		data_bus_driver <= "10101010"; -- Example
@@ -118,14 +119,14 @@ begin
 		Wr <= '1';
 		wait for CLK_PER;
 		Wr <= '0';
-		wait for 100 ns;
+		wait for delay;
 		
 		-- Read Status (TxStatus)
 		addr <= "010";
 		Rd <= '1';
 		wait for CLK_PER;
 		Rd <= '0';
-		wait for 100 ns;
+		wait for delay;
 		
 		wait for 5000 ns;
 		
