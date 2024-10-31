@@ -66,7 +66,7 @@ begin
 
 process (clk, rst) --- konfiguerer rx og tx ved start
 begin
-    if (rst = '0') then
+    if rst = '0' then
         State <= start;
 		  
         led_state <= '1'; ---- led på / default
