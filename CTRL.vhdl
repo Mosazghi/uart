@@ -11,8 +11,11 @@ entity CTRL is port(
 	databus	: inout 	std_logic_vector(7 downto 0);
 	snd_led	: out 	std_logic;
 	wr 		: out 	std_logic;
-	rd 		: out 	std_logic);
+	rd 		: out 	std_logic;
+	addr 		: inout		std_logic_vector(2 downto 0)
+	);
 end entity;
+
 
 architecture RTL of CTRL is
 	type	 State_Type is (Start, Write_Tx_Config, Finish, Idle, Get, Send);
@@ -24,7 +27,7 @@ architecture RTL of CTRL is
 
 	signal RxData 		: std_logic_vector(7 downto 0);
 	signal TxData 		: std_logic_vector(7 downto 0);
-	signal addr			: std_logic_vector(2 downto 0);
+	--signal addr			: std_logic_vector(2 downto 0);
 	signal led_state	: std_logic := '1'; 
 	signal counter		: integer := 0;
 	constant timer_period : integer := 50000000 / 20;  
@@ -56,7 +59,9 @@ begin
         --rx_ready    => rx_ready,              -- Data ready signal from RX module
         snd_led    => snd_led,              -- Control LED for data reception
         baud_sel => baud_sel,           -- Baud rate control signal
-        par_sel => par_sel        -- Parity control signal
+        par_sel => par_sel,        -- Parity control signal
+		  addr 		=> addr
+		  
     );
 	 
 	 
