@@ -9,7 +9,7 @@ entity TX is
         rst : in std_logic;
         Rd : in std_logic;
         Wr : in std_logic;
-        addr : in std_logic_vector(ADDR_BITS_N - 1 downto 0);
+        addr : in std_logic_vector(ADDR_BITS_N - 1 downto 0) := (others => '0'); 
         data_bus : inout std_logic_vector(DATA_BITS_N - 1 downto 0);
         TxD : out std_logic
     );
@@ -17,26 +17,20 @@ end TX;
 
 architecture RTL of TX is 
 
-    -- ADDR:
-    -- 000 = TxConfig (NA - Parity - Baud)
-    -- 001 = TxData (Data in)
-    -- 010 = TxStatus (NA - Busy)
-
     type state_type is (IDLE, START, DATA, STOP);
-    signal state : state_type := IDLE; -- Start in IDLE
+    signal state : state_type := IDLE;
 
-    signal tx_data : std_logic_vector(DATA_BITS_N - 1 downto 0);  -- Assigned only in p_ctrl
-    signal tx_data_internal : std_logic_vector(DATA_BITS_N - 1 downto 0);  -- Used in p_main
+    signal tx_data : std_logic_vector(DATA_BITS_N - 1 downto 0);  
+    signal tx_data_internal : std_logic_vector(DATA_BITS_N - 1 downto 0);  
     signal bit_count : integer range 0 to 7 := 0;
-    signal tx_done : std_logic;             
-    signal data_out : std_logic_vector(DATA_BITS_N - 1 downto 0); -- Temp data
+    signal data_out : std_logic_vector(DATA_BITS_N - 1 downto 0) := (others => '0');
 
     -- Status signals
     signal tx_busy : std_logic := '0'; 
 
     -- Config signals
     signal baud_rate  : integer range 9600 to 115200 := 115200; -- Baud rate
-    signal parity     : std_logic_vector(TX_PARITY_S downto TX_PARITY_E); 
+    signal parity     : std_logic_vector(TX_PARITY_S downto TX_PARITY_E) := (others => '0'); -- Initialized
 
     -- Baud configs
     signal baud_divider : integer;
@@ -44,7 +38,7 @@ architecture RTL of TX is
     signal baud_tick : std_logic := '0';    
 
 begin 
-    -- Tri-state buffer for data_bus
+    -- Tri-state buffer for data bus
     data_bus <= data_out when Rd = '1' else (others => 'Z');
 
     -- Process for Baud 
@@ -72,17 +66,15 @@ begin
             TxD <= '1';  
             bit_count <= 0;
             tx_busy <= '0';
-            tx_done <= '0';
         elsif rising_edge(clk) then 
             if baud_tick = '1' then
                 case state is
                     when IDLE =>
                         tx_busy <= '0';
-                        tx_done <= '0';
                         TxD <= '1';
 
                         if Wr = '1' and addr = TX_DATA_A then
-                            tx_data_internal <= tx_data;  -- Load tx_data to internal signal for transmission
+                            tx_data_internal <= tx_data;
                             state <= START;
                         end if;
 
@@ -93,15 +85,14 @@ begin
 
                     when DATA =>
                         if bit_count < 8 then
-                            TxD <= tx_data_internal(bit_count);  -- Use tx_data_internal for transmission
+                            TxD <= tx_data_internal(bit_count); 
                             bit_count <= bit_count + 1;
                         else
                             state <= STOP;  
                         end if;
 
                     when STOP =>
-                        tx_done <= '1';  
-                        TxD <= '1'; 
+                        TxD <= '1';
                         state <= IDLE;
 
                     when others =>
@@ -111,31 +102,32 @@ begin
         end if;
     end process p_main;
 
-    -- Process to control data_out and configuration settings
+    -- Process to/from CTRL
     p_ctrl: process(clk, rst)
     begin
         if rst = '0' then
             data_out <= (others => '0');
             baud_rate <= 115200; 
             parity <= (others => '0');
-            tx_data <= (others => '0');  -- Reset tx_data here
+            tx_data <= (others => '0');
             
         elsif rising_edge(clk) then
-            -- Handle Read Operation
+		  
+            -- Read
             if Rd = '1' then
                 case addr is
                     when TX_STATUS_A =>
-                        data_out <= "0000000" & tx_busy;  -- Output status
+                        data_out <= "0000000" & tx_busy;
                     when TX_CONFIG_A =>
-                        data_out <= (others => '0');      -- Default configuration read
+                        data_out <= (others => '0');
                     when others =>
-                        data_out <= (others => '0');      -- Default for undefined addresses
+                        data_out <= (others => '0');
                 end case;
             else
-                data_out <= (others => 'Z'); -- High impedance when not reading
+                data_out <= (others => 'Z'); 
             end if;
 
-            -- Handle Write Operation
+            -- Write
             if Wr = '1' then
                 case addr is
                     when TX_CONFIG_A =>
@@ -143,7 +135,7 @@ begin
                         parity <= data_bus(TX_PARITY_S downto TX_PARITY_E);
                         baud_divider <= CLOCK_FREQ_HZ / baud_rate;
                     when TX_DATA_A =>
-                        tx_data <= data_bus;  -- Load data to be transmitted
+                        tx_data <= data_bus; 
                     when others =>
                         null;
                 end case;
@@ -152,4 +144,5 @@ begin
     end process p_ctrl;
 
 end architecture RTL;
+
 
