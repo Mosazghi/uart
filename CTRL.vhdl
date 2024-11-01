@@ -105,18 +105,23 @@ begin
 					addr <= "110";    ------- addresse for hvor den skal lese
 					RoW('0'); -- lese
 				
-					-- Tilbakemelding: bruk en index ikke x downto y for dette. bruk If's for alle. 
+					
 					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
 					
 					-- Sjekker Rx status 
 					if 	(databus(3) = '1') then
 						-- Parity Error
-					elsif (databus(2) = '1') then
+					if (databus(2) = '1') then
 						-- Data Lost
-					elsif (databus(1) = '1') then
+					if (databus(1) = '1') then
 						-- FIFO Full
-						State <= Get;
-					elsif (databus(0) = '1') then
+						
+						
+						State <= Get; ----------------- teste dette i testbench
+						
+						
+						
+					if (databus(0) = '1') then
 						-- FIFO Empty
 					else
 						state <= Idle;
@@ -155,6 +160,7 @@ begin
 					end if;
 					
 					snd_led <= led_state;
+					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
 						-- TX BUSY
 					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
 						addr <= "001";							-- Setter addresse for sending av data til Tx
@@ -162,11 +168,12 @@ begin
 						databus <= TxData; 					-- Sender data til Tx
 						databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
 						state <= Idle;
-					else 
+						
+					else
 						state <= Send;
 					-- Tilbakemelding: husk å sjekke tx_busy osv før man sender
 					end if;
-					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
+					
 			end case;
 		end if;
 	end process;

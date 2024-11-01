@@ -88,6 +88,20 @@ begin
         baud_sel <= "010";
         par_sel <= "10";
         wait for 100 ns;
+		  
+		  
+		  
+		// Check if LED is ON
+		if (snd_led == 1) begin
+      report("Test Passed: LED is ON");
+		
+		end else begin
+      report("Test Failed: LED is OFF");
+		
+		end
+		  wait for 100 ns;
+		  
+		  
 
         -- Add more stimulus as needed
 
