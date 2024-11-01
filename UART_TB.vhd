@@ -20,7 +20,7 @@ architecture SimulationModel of UART_tb is
     signal par_sel  : std_logic_vector(1 downto 0) := "00"; -- Initial parity setting
 begin
 
-    -- Instantiate the UART module
+    --  UART module
     uut: entity work.UART
         port map (
             clk      => clk,
