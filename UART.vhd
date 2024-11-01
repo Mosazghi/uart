@@ -9,8 +9,7 @@ entity UART is
         rst      : in std_logic;                          -- Reset signal (KEY0), active LOW
         snd      : in std_logic;                          -- Button to transmit a predefind character, activ LOW
         RxD      : in std_logic;                          -- UART received data (input)
-        TxD      : out std_logic;                         -- UART transmit signal(output)
-        snd_led  : out std_logic;                         -- LED indicating received/transmitted
+        TxD      : out std_logic;                         -- UART transmit signal(output)                        -- LED indicating received/transmitted
         baud_sel : in std_logic_vector(2 downto 0);       -- Baud rate selection SW0, SW1 and  SW2
         par_sel  : in std_logic_vector(1 downto 0)      -- Parity selection SW3 and SW4
         
@@ -23,6 +22,7 @@ architecture Behavioral of UART is
     signal wr         	: std_logic;                        -- Write signal
     signal rd         	: std_logic;    							-- Read signal
 	 signal addr      	: std_logic_vector(2 downto 0);		-- Address for register selection
+	 signal snd_led      : std_logic;
 	
 begin
 		

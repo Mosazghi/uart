@@ -4,6 +4,9 @@ use ieee.numeric_std.all;
 use work.uart_library.all;
 
 entity RX is 
+  generic (
+            OVERSAMPLING_FACTOR : integer := 8
+          );
     port( clk : in  std_logic;
           rst_n : in  std_logic;
           RxD : in  std_logic;
@@ -18,7 +21,8 @@ architecture RTL of RX is
   type state_t is (IDLE, START, DATA, STOP);
   signal state : state_t := IDLE;                   -- State machine 
  
-  signal rx_data_buf  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
+  signal in_fifo_buf  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
+  signal out_fifo_buf  : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for received (RxD)
   signal wrreq    : std_logic := '0';               -- Write request to FIFO
   signal rdreq    : std_logic := '0';               -- Read request from 
   signal rx_ready : std_logic := '0';               -- RX ready flag (internal)
@@ -41,7 +45,7 @@ architecture RTL of RX is
   signal os_divider : integer := 0; 
   signal os_tick : std_logic := '0'; 
   signal os_counter : integer; 
-  signal sample_buf : std_logic_vector(DATA_BITS_N - 1 downto 0);   -- Data buffer for sampling 
+  signal sample_buf : std_logic_vector(DATA_BITS_N + 1 downto 0);   -- Data buffer for sampling 
 
   function count_ones_middle_six(data : std_logic_vector) return integer is
   variable count : integer := 0;
@@ -55,16 +59,16 @@ architecture RTL of RX is
   end function;
 begin
     -- FIFO Instance
-    i_fifo : entity work.FIFO
-        port map (
-              clock => clk,
-              data  => rx_data_buf,           -- Data input to FIFO (received data)
-              rdreq => rdreq,             -- Read request signal to FIFO
-              wrreq => wrreq,             -- Write request signal to FIFO
-              empty => fifo_empty,        -- FIFO empty status
-              full  => fifo_full,         -- FIFO full status
-              q     => data_bus           -- Data output from FIFO  endre 
-          );
+   i_fifo : entity work.FIFO
+       port map (
+             clock => clk,
+             data  => in_fifo_buf,           -- Data input to FIFO (received data)
+             rdreq => rdreq,             -- Read request signal to FIFO
+             wrreq => wrreq,             -- Write request signal to FIFO
+             empty => fifo_empty,        -- FIFO empty status
+             full  => fifo_full,         -- FIFO full status
+             q     => out_fifo_buf           -- Data output from FIFO  endre 
+         );
 
     p_baud_generator : process(clk, rst_n)
         begin
@@ -91,7 +95,7 @@ begin
               if os_counter = os_divider - 1 then
                 os_tick <= '1';
                 os_counter <= 0;
-                sample_buf <= sample_buf & RxD;
+                sample_buf <=  RxD & sample_buf(DATA_BITS_N + 1 downto 1); 
               else
                 os_tick <= '0';
                 os_counter <= os_counter + 1;
@@ -126,17 +130,23 @@ begin
                       end if; 
                     when DATA => -- sample data bits 
                       if os_tick = '1' then 
-                        if count_ones_middle_six(sample_buf) > 3 then -- Data bit verified (# 1's > # 0's)
+                        if count_ones_middle_six(sample_buf) > 3 then 
                           v_majority_bit := '1';
                           else  
                           v_majority_bit := '0';
                         end if;
-                        rx_data_buf(v_bit_count) <= v_majority_bit;
-                        wrreq <= '1';  
-                        v_bit_count := v_bit_count + 1;
+                        if fifo_full = '0' then
+                            wrreq <= '1';  
+                            in_fifo_buf(v_bit_count) <= v_majority_bit;
+                            v_bit_count := v_bit_count + 1;
+                        else 
+                          null; -- FIXME: what should be done when fifo is full
+                          end if; 
                       end if;
 
                       if v_bit_count = 7 then
+                        v_bit_count := 0;
+                        v_majority_bit := 'Z';
                         state <= STOP;
                       end if;
 
@@ -147,6 +157,7 @@ begin
                           else  --false stop bit 
                             state <= IDLE;
                         end if; 
+                        rx_done <= '1';
                       end if; 
                   end case;
                 end if; 
@@ -162,9 +173,15 @@ begin
                 if rd = '1' then
                   case addr is
                     when RX_DATA_A =>
-                      data_bus <= rx_data_buf;
+                      if fifo_empty = '0' then
+                        data_bus <= out_fifo_buf;
+                      else
+                        data_bus <= (others => 'Z');
+                      end if;
                     when RX_STATUS_A =>
                       data_bus <= "0000" & parity_err & data_lost & fifo_full & fifo_empty;
+                    when others =>
+                      null; -- FIXME: ignore for now 
                   end case;
                 end if;
 
@@ -174,7 +191,7 @@ begin
                       baud_rate <= to_integer(unsigned(data_bus(RX_BAUD_S downto RX_BAUD_E)));
                       parity <= data_bus(RX_PARITY_S downto RX_PARITY_E);
                       baud_divider <= CLOCK_FREQ_HZ/baud_rate; 
-                      os_divider <= baud_divider/8; 
+                      os_divider <= baud_divider/OVERSAMPLING_FACTOR;
                     when others =>
                       null; -- FIXME: ignore for now 
                   end case;
