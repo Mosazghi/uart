@@ -16,8 +16,8 @@ architecture SimulationModel of UART_tb is
     signal RxD      : std_logic := '1';
     signal TxD      : std_logic;
     signal snd_led  : std_logic;
-    signal baud_sel : std_logic_vector(2 downto 0) := "000"; -- Initial baud rate
-    signal par_sel  : std_logic_vector(1 downto 0) := "00"; -- Initial parity setting
+    signal baud_sel : std_logic_vector(2 downto 0) := "000"; -- baud rate
+    signal par_sel  : std_logic_vector(1 downto 0) := "00"; -- parity setting
 begin
 
     --  UART module
@@ -32,4 +32,65 @@ begin
             baud_sel => baud_sel,
             par_sel  => par_sel
         );
+		  
+		      -- Clock 
+    clk_process: process
+   begin
+    clk <= '0';
+    wait for CLK_PER / 2;
+    clk <= '1';
+    wait for CLK_PER / 2;
+    end process clk_process;
+	 
+	     -- Test process
+    test_process: process
+    begin
+        -- Reset UART 
+        rst <= '0';
+        wait for CLK_PER * 10;
+        rst <= '1';
+        wait for CLK_PER * 10;
+
+        -- Test transmission 
+        snd <= '0';  
+        wait for CLK_PER * 5;
+        snd <= '1';  
+
+        -- Wait for transmission to complete
+        wait for CLK_PER * 100;
+
+        -- Test reception
+        RxD <= '0';  -- Start bit
+        wait for CLK_PER * 10;
+        for i in 0 to 7 loop
+            RxD <= '1';  -- Transmit data bit 
+            wait for CLK_PER * 10;
+        end loop;
+        RxD <= '1';  -- Stop bit
+        wait for CLK_PER * 20;
+
+        -- 
+        wait for CLK_PER * 50;
+
+        -- Change baud rate and parity 
+        baud_sel <= "010";  -- Change to a different baud rate
+        par_sel <= "01";    -- Change to even parity
+
+        -- Test transmission again 
+        snd <= '0';  
+        wait for CLK_PER * 5;
+        snd <= '1';  
+
+        -- Wait for transmission to complete
+        wait for CLK_PER * 100;
+
+        -- End of test
+        wait;
+    end process test_process;
+
+end architecture testbench;
+
+
+
+
 
