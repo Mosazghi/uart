@@ -14,11 +14,11 @@ package uart_library is
   -- Array of baud rate dividers for easy lookup
   type baud_div_array is array (0 to 4) of integer;
   constant baud_dividers : baud_div_array := (
-    DIV_115200,   -- "100" => 115200 baud
-    DIV_57600,   -- "011" => 57600 baud
+    DIV_115200,   -- "000" => 115200 baud
+    DIV_57600,   -- "001" => 57600 baud
     DIV_38400,   -- "010" => 38400 baud
-    DIV_19200,   -- "001" => 19200 baud
-    DIV_9600    -- "000" => 9600 baud
+    DIV_19200,   -- "011" => 19200 baud
+    DIV_9600    -- "100" => 9600 baud
   );
 
 
