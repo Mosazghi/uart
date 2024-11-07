@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
+use work.uart_library.all;
 entity RX_tb is
 end RX_tb;
 
@@ -33,7 +34,7 @@ architecture behavior of RX_tb is
 
     -- Clock generation: 50 MHz
     constant CLK_PERIOD : time := 20 ns;
-    constant BIT_PERIOD : time := 8681 ns; -- 115200 baud
+    constant BIT_PERIOD : time := 16000 ns; -- 115200 baud
 
     -- UART parameters
     signal baud_rate_sel : std_logic_vector(2 downto 0) := "100"; -- Set default to 115200 baud
@@ -65,93 +66,96 @@ begin
 
     -- Stimulus process
     stimulus_process : process
+      -- Initialization procedure
+      procedure tb_init is
+      begin
+        wr <= '0';
+        rd <= '0';
+        addr <= "000";
+        data_bus <= (others => 'Z');
+        RxD <= '1';
+        -- wait until rst_n = '1';
+        -- wait for 100 ns;
+        -- wait until rising_edge(clk);
+      end tb_init;
+
+      -- reset 
+      procedure tb_reset is
+        begin
+          rst_n <= '0';
+          wait for CLK_PERIOD * 10;
+          rst_n <= '1';
+          wait for CLK_PERIOD * 10;
+        end tb_reset;
+           
+
+    procedure configure_baud_rate is
     begin
-        -- Reset the UUT
-        rst_n <= '0';
-        wait for CLK_PERIOD * 10;
-        rst_n <= '1';
-        wait for CLK_PERIOD * 10;
+      wr <= '1';
+      addr <= RX_CONFIG_A; -- Set RX_CONFIG_A address
+      data_bus <= "00000011";  -- Baud rate selection for 115200 baud
+      wait for CLK_PERIOD;
+      wr <= '0';
+      addr <= "ZZZ";
+      data_bus <= "ZZZZZZZZ";
+      wait for CLK_PERIOD * 10;
+    end configure_baud_rate;
 
-        -- Configure RX for 115200 baud by setting baud_rate in RX_CONFIG_A
-        wr <= '1';
-        addr <= "100"; -- Address for RX_CONFIG_A
-        data_bus <= "00000011";  -- Set baud rate selection bits
-        wait for CLK_PERIOD ;
-        wr <= '0';
-        addr <= "ZZZ";
-        data_bus <= "ZZZZZZZZ";
-        -- Simulate sending one UART frame (start, data, and stop bits)
-        wait for CLK_PERIOD * 10;
 
-        -- Start bit (0)
-        RxD <= '0';
+    -- Procedure to send a byte through RxD
+    procedure send_byte(data : std_logic_vector(7 downto 0)) is
+    begin
+      -- Start bit (0)
+      RxD <= '0';
+      wait for BIT_PERIOD;
+      -- Data bits
+      for i in 0 to 7 loop
+        RxD <= data(i);
         wait for BIT_PERIOD;
+      end loop;
+      -- Stop bit (1)
+      RxD <= '1';
+    end send_byte;
 
-        -- Data bits (example: 10101010)
-        for i in 0 to 7 loop
-            if (i mod 2 = 0) then
-                RxD <= '1';
-            else
-                RxD <= '0';
-            end if;
-            wait for BIT_PERIOD;
-        end loop;
 
-        -- Stop bit (1)
-        RxD <= '1';
-        wait for BIT_PERIOD;
+    -- Procedure to read data from RX
+    procedure read_rx_data is
+    begin
+      wait for BIT_PERIOD;
+      rd <= '1';
+      addr <= RX_DATA_A; -- Set address for RX_DATA_A
+      wait for CLK_PERIOD;
+      rd <= '0';
+      addr <= "000";
+      wait for CLK_PERIOD;
+    end read_rx_data;
 
-        -- Check if data has been received by reading RX_DATA_A
-        rd <= '1';
-        addr <= "101"; -- Address for RX_DATA_A
-        wait for CLK_PERIOD;
-        rd <= '0';
-        addr <= "101"; -- Address for RX_DATA_A
-    wait for CLK_PERIOD* 22;
+    -- Procedure to check received data
+    procedure check_received_data(expected_data : std_logic_vector(7 downto 0)) is
+    begin
+      assert data_bus = expected_data
+        report "Mismatch in received data!" severity error;
+    end check_received_data;
+    
+    begin
+      tb_init;
+      tb_reset;
 
-        -- Reset the UUT
-        rst_n <= '0';
-        wait for CLK_PERIOD * 10;
-        rst_n <= '1';
-        wait for CLK_PERIOD * 10;
+      configure_baud_rate;
 
-        -- Configure RX for 115200 baud by setting baud_rate in RX_CONFIG_A
-        wr <= '1';
-        addr <= "100"; -- Address for RX_CONFIG_A
-        data_bus <= "00000011";  -- Set baud rate selection bits
-        wait for CLK_PERIOD ;
-        wr <= '0';
-        addr <= "ZZZ";
-        data_bus <= "ZZZZZZZZ";
-        -- Simulate sending one UART frame (start, data, and stop bits)
-        wait for CLK_PERIOD * 10;
 
-        -- Start bit (0)
-        RxD <= '0';
-        wait for BIT_PERIOD;
+      -- Send a byte and verify
+      send_byte("01010101");
+      read_rx_data;
+      check_received_data("10101010");
 
-        -- Data bits (example: 10101010)
-        for i in 0 to 7 loop
-            if (i mod 2 = 0) then
-                RxD <= '1';
-            else
-                RxD <= '0';
-            end if;
-            wait for BIT_PERIOD;
-        end loop;
+      -- Send another byte and verify
+      -- send_byte("11001100");
+      -- read_rx_data;
+      -- check_received_data("11001100");
 
-        -- Stop bit (1)
-        RxD <= '1';
-        wait for BIT_PERIOD;
-
-        -- Check if data has been received by reading RX_DATA_A
-        rd <= '1';
-        addr <= "101"; -- Address for RX_DATA_A
-        wait for CLK_PERIOD;
-        rd <= '0';
-        addr <= "101"; -- Address for RX_DATA_A
-        -- Simulation complete
-        assert false report "Testbench finished" severity failure;
+      wait for 10000 ns;
+zz      assert false report "Testbench finished" severity failure;
     end process;
 end behavior;
 

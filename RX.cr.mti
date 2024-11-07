@@ -4,6 +4,7 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
+-- Loading package uart_library
 -- Compiling entity RX_tb
 -- Compiling architecture behavior of RX_tb
 
@@ -25,15 +26,6 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Compiling package body uart_library
 -- Loading package uart_library
 
-} {} {}} /home/mosa/NTNU/IELEG2113/uart/CTRL.vhdl {1 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/CTRL.vhdl
-Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity CTRL
--- Compiling architecture RTL of CTRL
-
 } {} {}} /home/mosa/NTNU/IELEG2113/uart/RX.vhdl {1 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/RX.vhdl
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
@@ -44,17 +36,5 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Compiling entity RX
 -- Compiling architecture RTL of RX
 -- Loading entity FIFO
-
-} {} {}} /home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd {0 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd
-Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package uart_library
--- Compiling entity CTRL_tb
--- Compiling architecture SimulationModel of CTRL_tb
-** Error (suppressible): /home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd(47): (vcom-1141) Identifier "ProjectUART" does not identify a component declaration.
-** Note: /home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd(97): VHDL Compiler exiting
 
 } {} {}}

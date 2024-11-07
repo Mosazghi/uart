@@ -23,16 +23,16 @@ architecture RTL of RX is
   constant OS_DIV_19200    : integer := 325;  -- 19200 baud with 8x oversampling
   constant OS_DIV_38400    : integer := 163;  -- 38400 baud with 8x oversampling
   constant OS_DIV_57600    : integer := 108;  -- 57600 baud with 8x oversampling
-  constant OS_DIV_115200   : integer := 55;   -- 115200 baud with 8x oversampling
+  constant OS_DIV_115200   : integer := 100;  -- 115200 baud with 8x oversampling
 
   -- Array for oversampling dividers (local to RX module)
   type os_div_array is array (0 to 4) of integer;
   constant os_dividers : os_div_array := (
-    OS_DIV_115200,   -- "000" => 115200 baud
-    OS_DIV_57600,   -- "001" => 57600 baud
-    OS_DIV_38400,   -- "010" => 38400 baud
-    OS_DIV_19200,   -- "011" => 19200 baud
-    OS_DIV_9600    -- "100" => 9600 baud
+    OS_DIV_115200,  
+    OS_DIV_57600,  
+    OS_DIV_38400,   
+    OS_DIV_19200,  
+    OS_DIV_9600   
   );
 
   type state_t is (IDLE, START, DATA, STOP);
@@ -108,14 +108,13 @@ begin
         end process;
 
         p_os_generator : process(clk, rst_n)
-          variable v_os_counter : integer range 0 to OVERSAMPLING_FACTOR  := 0;
         begin 
 
             if rst_n = '0' then
               os_counter <= 0;
-              -- v_os_counter := 0;
               os_tick_counter <= 0;
               os_tick <= '0';
+              sample_buf <= (others => '0'); 
             elsif rising_edge(clk) and rx_start = '1' then
               if os_counter = os_divider - 1 then
                 if os_tick_counter = OVERSAMPLING_FACTOR - 1 then
@@ -136,21 +135,23 @@ begin
             
     -- Process to receive data 
     p_main: process(clk, rst_n) is 
-            variable v_majority_bit : std_logic := 'Z';
-            variable v_bit_count : integer := 0;
-            variable v_rx_data_buf : std_logic_vector(DATA_BITS_N - 1 downto 0) := (others => 'Z');
+            variable v_majority_bit : std_logic;
+            variable v_bit_count : integer;
+            variable v_rx_data_buf : std_logic_vector(DATA_BITS_N - 1 downto 0);
                        
             begin
               if rst_n = '0' then
                 v_bit_count := 0;
-                v_majority_bit := 'Z';
-                v_rx_data_buf := (others => 'Z');
+                v_majority_bit := '0';
+                v_rx_data_buf := (others => '0');
                 state <= IDLE; 
                 rx_ready <= '0';
                 rx_done <= '0';
                 parity_err <= '0';
                 data_lost <= '0';
                 rx_start <= '0';
+                wrreq <= '0'; 
+                rdreq <= '0';
               elsif rising_edge(clk) then
                   case state is
                     when IDLE => 
@@ -172,45 +173,43 @@ begin
                       -- end if; 
                                           
                     when DATA => -- sample data bits 
-                      if baud_tick = '1' then
-                      if os_tick = '1' then 
-                        if count_ones_middle_six(sample_buf) > 3 then 
-                          v_majority_bit := '1';
-                          else  
-                          v_majority_bit := '0';
+                      -- if baud_tick = '1' then
+                        if os_tick = '1' then 
+                          if count_ones_middle_six(sample_buf) > 3 then 
+                            v_majority_bit := '1';
+                            else  
+                            v_majority_bit := '0';
+                          end if;
+                          v_rx_data_buf(v_bit_count) := v_majority_bit;
+
+                          v_bit_count := v_bit_count + 1;
+                          
+                          if v_bit_count = 8 then
+                            if fifo_full = '0' then
+                              wrreq <= '1';  
+                              in_fifo_buf <= v_rx_data_buf;
+                            end if; 
+                            v_bit_count := 0;
+                            v_majority_bit := '0';
+                            v_rx_data_buf := (others => '0');
+                            state <= STOP;
+                          end if;
                         end if;
-                        v_rx_data_buf(v_bit_count) := v_majority_bit;
-                      end if;
-                      v_bit_count := v_bit_count + 1;
-                      
-                      if v_bit_count = 8 then
-                        if fifo_full = '0' then
-                          wrreq <= '1';  
-                          in_fifo_buf <= v_rx_data_buf;
-                        end if; 
-                        v_bit_count := 0;
-                        v_majority_bit := 'Z';
-                        v_rx_data_buf := (others => 'Z');
-                        state <= STOP;
-                      end if;
-                      end if;
+                      -- end if;
 
                     when STOP => --sample stop bit 
-                      if baud_tick = '1' then
-                                           
-                      if os_tick = '1' then 
-
-                         
-                        if count_ones_middle_six(sample_buf) > 3 then -- Stop bit verified (# 1's > # 0's)
-                          rx_ready <= '1';
-                          state <= IDLE;
-                          else  --false stop bit 
+                      -- if baud_tick = '1' then
+                        if os_tick = '1' then 
+                          if count_ones_middle_six(sample_buf) > 3 then -- Stop bit verified (# 1's > # 0's)
+                            rx_ready <= '1';
                             state <= IDLE;
+                            else  --false stop bit 
+                              state <= IDLE;
+                          end if; 
+                          rx_done <= '1';
+                          rx_start <= '0';
                         end if; 
-                        rx_done <= '1';
-                        rx_start <= '0';
-                      end if; 
-                      end if; 
+                      -- end if; 
                   end case;
               end if;
             end process p_main;
@@ -219,20 +218,27 @@ begin
     p_ctrl: process(clk, rst_n) is
             begin
               if rst_n = '0' then
-                -- NOTE: reset something 
+                data_bus <= (others => 'Z'); 
+                baud_rate <= (others => '0'); 
+                parity <= (others => '0'); 
+                baud_divider <= DIV_115200;
+                os_divider <= OS_DIV_115200;
               elsif rising_edge(clk) then
+                data_bus <= (others => 'Z');
                 if rd = '1' then
                   case addr is
                     when RX_DATA_A =>
+                      report "READDD";
                       if fifo_empty = '0' and rx_ready ='1' then
+                        report "RX is Ready";
                         data_bus <= out_fifo_buf;
                       else
-                        data_bus <= (others => 'Z');
+                        report "RX is NOT Ready";
                       end if;
                     when RX_STATUS_A =>
                       data_bus <= "0000" & parity_err & data_lost & fifo_full & fifo_empty;
                     when others =>
-                      data_bus <= (others => 'Z');  -- Release the bus
+                      null;
                   end case;
                 end if;
 
@@ -244,7 +250,7 @@ begin
                       baud_divider <= baud_dividers(to_integer(unsigned(baud_rate)));
                       os_divider <= os_dividers(to_integer(unsigned(baud_rate)));
                     when others =>
-                      null; -- FIXME: ignore for now 
+                      null;
                   end case;
                   end if;
               end if;
