@@ -7,9 +7,9 @@ entity CTRL_tb is
 end CTRL_tb;
 
 architecture SimulationModel of CTRL_tb is 
-	constant CLK_FREQ_HZ : integer := 50000000;  
-	constant CLK_PER : time := 20 ns;
-	constant delay : time := 100 ns;
+	constant CLK_FREQ_HZ : integer 	:= 50000000;  
+	constant CLK_PER 		: time 		:= 20 ns;
+	constant delay 		: time 		:= 100 ns;
 	
 	component CTRL port(
 		clk 		: in 		std_logic;
@@ -21,7 +21,7 @@ architecture SimulationModel of CTRL_tb is
 		snd_led	: out 	std_logic;
 		wr 		: out 	std_logic;
 		rd 		: out 	std_logic;
-		addr 		: inout		std_logic_vector(2 downto 0)
+		addr 		: inout	std_logic_vector(2 downto 0)
 		);
 	end component CTRL;
 	
@@ -116,8 +116,8 @@ begin
     end process;
 		  
 		  
-		   send_process: process
-        variable counter : integer := 0;
+	 send_process: process
+		  variable counter : integer := 0;
     begin
         -- Initialize
         snd <= '0';
