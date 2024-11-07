@@ -65,12 +65,11 @@ begin
             when start =>
                 --konfigurerer rx
                 addr <= "100";  -- Addresse rx
-					 
+					 wr <= '1';			-- write
 					 databus <= ("00000" & addr);
                 RxData(2 downto 0) <= baud_sel;
                 RxData(4 downto 3) <= par_sel;
                 databus <= RxData;
-                rd <= '1'; -- skrive
 					 
                 State <= Write_Tx_Config;
             
@@ -80,12 +79,11 @@ begin
                 TxData(2 downto 0) <= baud_sel;
                 TxData(4 downto 3) <= par_sel;
                 databus <= TxData;
-                rd <= '1';  -- skrive
                 State <= Finish;
             
             when Finish =>
                 -- etter inialisering
-                rd <= '0';  -- slutt å skrive
+					 wr <= '0'-- slutt å skrive
                 databus <= (others => 'Z');
 					 RxData <= databus; 
 					 TxData <= databus;
