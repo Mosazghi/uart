@@ -1,5 +1,1246 @@
-# Compile of TX.vhd failed with 3 errors.
-# Compile of TX_TB.vhdl failed with 55 errors.
-# 2 compiles, 2 failed with 58 errors.
-# Project file C:/Users/Emil/OneDrive - NTNU/Documents/GitHub/uart/uart.mpf is write protected, data cannot be saved.
-# Unable to save project.
+# reading /home/mosa/Applications/modelsim_ase/linuxaloem/../modelsim.ini
+# Loading project RX
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+vsim work.rx_tb
+# vsim work.rx_tb 
+# Start time: 09:14:28 on Nov 07,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading altera_mf.altera_device_families(body)
+# Loading altera_mf.scfifo(behavior)
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/uut/*
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+# Break key hit
+# Simulation stop requested.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+restart
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+# Break key hit
+# Break in Process clk_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 61
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+restart
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+vsim work.rx_tb
+# End time: 09:20:07 on Nov 07,2024, Elapsed time: 0:05:39
+# Errors: 1, Warnings: 3
+# vsim work.rx_tb 
+# Start time: 09:20:07 on Nov 07,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading altera_mf.altera_device_families(body)
+# Loading altera_mf.scfifo(behavior)
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/uut/*
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+add wave -position end sim:/rx_tb/uut/p_main/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/p_main/v_majority_bit'. 
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/uut/*
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 88050 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 88050 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 175300 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+add wave -position end sim:/rx_tb/uut/p_main/*
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/v_majority_bit'. 
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/uut/*
+add wave -position end sim:/rx_tb/uut/p_main/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 113
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 410 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 120
+# Load canceled
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 120
+# Compile of RX.vhdl failed with 1 errors.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 3 failed with 6 errors.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 87650 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 120
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 89450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 97450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 97450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 97450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 97450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 97450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 107450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# WARNING: No extended dataflow license exists
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl failed with 14 errors.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 3 failed with 19 errors.
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl failed with 14 errors.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 3 failed with 19 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 107450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 121
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 178320 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 140
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Failure: Testbench finished
+#    Time: 178320 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 140
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+run -all
+# ** Failure: Testbench finished
+#    Time: 356640 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 140
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(simulationmodel)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/baud_rate_sel'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/clk'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/rst_n'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/RxD'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/data_bus'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/addr'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/rd'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/wr'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/state'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/in_fifo_buf'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/out_fifo_buf'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/wrreq'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/rdreq'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/rx_ready'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/rx_done'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/fifo_empty'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/fifo_full'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/parity_err'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/data_lost'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/baud_rate'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/parity'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/baud_divider'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/baud_tick'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/baud_counter'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/init_sig'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/os_divider'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/os_tick'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/os_counter'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/os_tick_counter'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/sample_buf'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/rx_start'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/p_main/v_majority_bit'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/p_main/v_bit_count'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/uut/p_main/v_rx_data_buf'. 
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87020 ns  Iteration: 0  Instance: /rx_tb
+# ** Error: Mismatch in received data!
+#    Time: 173870 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 173970 ns  Iteration: 0  Process: /rx_tb/p_main File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process p_main at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 173
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/i_RX/*
+add wave -position end sim:/rx_tb/i_RX/p_main/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87020 ns  Iteration: 0  Instance: /rx_tb
+# ** Error: Mismatch in received data!
+#    Time: 173870 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 173970 ns  Iteration: 0  Process: /rx_tb/p_main File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process p_main at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 173
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+vsim work.rx_tb
+# End time: 11:17:21 on Nov 07,2024, Elapsed time: 1:57:14
+# Errors: 3, Warnings: 2
+# vsim work.rx_tb 
+# Start time: 11:17:21 on Nov 07,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.uart_library(body)
+# Loading work.rx_tb(simulationmodel)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading altera_mf.altera_device_families(body)
+# Loading altera_mf.scfifo(behavior)
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/i_RX/*
+add wave -position end sim:/rx_tb/i_RX/p_main/*
+restart
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87020 ns  Iteration: 0  Instance: /rx_tb
+# ** Error: Mismatch in received data!
+#    Time: 173870 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 173970 ns  Iteration: 0  Process: /rx_tb/p_main File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process p_main at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 173
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(simulationmodel)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87020 ns  Iteration: 0  Instance: /rx_tb
+# ** Error: Mismatch in received data!
+#    Time: 173870 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 173970 ns  Iteration: 0  Process: /rx_tb/p_main File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process p_main at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 173
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/clk'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/rst_n'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/RxD'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/data_bus'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/addr'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/rd'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/wr'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/state'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/in_fifo_buf'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/out_fifo_buf'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/wrreq'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/rdreq'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/rx_ready'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/rx_done'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/fifo_empty'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/fifo_full'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/parity_err'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/data_lost'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/baud_rate'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/parity'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/baud_divider'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/baud_tick'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/baud_counter'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/init_sig'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/os_divider'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/os_tick'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/os_counter'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/os_tick_counter'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/sample_buf'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/rx_start'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/p_main/v_majority_bit'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/p_main/v_bit_count'. 
+# Warning in wave window restart: (vish-4014) No objects found matching '/rx_tb/i_RX/p_main/v_rx_data_buf'. 
+run -all
+# ** Failure: Testbench finished
+#    Time: 107450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 120
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/uut/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.rx_tb(behavior)
+# Loading work.uart_library(body)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 107450 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 120
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Error: Mismatch in received data!
+#    Time: 174320 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 174420 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 174420 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 174420 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+# Compile of RX.vhdl was successful.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 174420 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+add wave -position end sim:/rx_tb/uut/p_main/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Failure: Testbench finished
+#    Time: 174420 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# WARNING: No extended dataflow license exists
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of CTRL.vhdl failed with 4 errors.
+# Compile of CTRL_tb.vhd failed with 1 errors.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 6 compiles, 2 failed with 5 errors.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Failure: Testbench finished
+#    Time: 87570 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# WARNING: No extended dataflow license exists
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# WARNING: No extended dataflow license exists
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 96151 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 106151 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 159
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 96151 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 106151 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 159
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+add wave -position end sim:/rx_tb/uut/p_os_generator/*
+# (vish-4014) No objects found matching 'sim:/rx_tb/uut/p_os_generator/*'.
+add wave -position end sim:/rx_tb/uut/p_os_generator/*
+# (vish-4014) No objects found matching 'sim:/rx_tb/uut/p_os_generator/*'.
+add wave -position end sim:/rx_tb/uut/i_fifo/*
+add wave -position end sim:/rx_tb/*
+add wave -position end sim:/rx_tb/uut/*
+add wave -position end sim:/rx_tb/uut/p_main/*
+add wave -position end sim:/rx_tb/uut/p_os_generator/*
+# (vish-4014) No objects found matching 'sim:/rx_tb/uut/p_os_generator/*'.
+add wave -position end sim:/rx_tb/uut/p_baud_generator/*
+# (vish-4014) No objects found matching 'sim:/rx_tb/uut/p_baud_generator/*'.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Error: (vsim-13) Recompile work.rx_tb because work.uart_library has changed.
+# ** Error (suppressible): (vsim-12) Recompile work.rx_tb(behavior) after work.rx_tb is recompiled.
+# ** Error: (vsim-13) Recompile work.rx_tb(behavior) because work.uart_library has changed.
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart -f
+# No Design Loaded!
+# Break key hit
+vsim work.rx_tb
+# vsim work.rx_tb 
+# Start time: 11:17:21 on Nov 07,2024
+# Error loading design
+# End time: 12:24:32 on Nov 07,2024, Elapsed time: 1:07:11
+# Errors: 3, Warnings: 2
+restart -f
+# No Design Loaded!
+# Break key hit
+vsim work.rx_tb
+# vsim work.rx_tb 
+# Start time: 12:24:56 on Nov 07,2024
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading altera_mf.altera_device_families(body)
+# Loading altera_mf.scfifo(behavior)
+restart
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 87470 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 97470 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 160660 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 170660 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -continue
+# ** Error: Mismatch in received data!
+#    Time: 160660 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 170660 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 331320 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 341320 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 501980 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 511980 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 672640 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 682640 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 843300 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 853300 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 1013960 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 1023960 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 1184620 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 1194620 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 1355280 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 1365280 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 1525940 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 1535940 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 1696600 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 1706600 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 1867260 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 1877260 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+run -all
+# ** Error: Mismatch in received data!
+#    Time: 160660 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 170660 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Note: READDD
+#    Time: 160630 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Error: Mismatch in received data!
+#    Time: 160660 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 170660 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# Compile of RX.vhdl was successful.
+# Compile of RX_TB.vhdl was successful.
+# Compile of FIFO.vhd was successful.
+# Compile of LIBRARY.vhdl was successful.
+# 4 compiles, 0 failed with no errors.
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.uart_library(body)
+# Loading work.rx_tb(behavior)
+# Loading work.rx(rtl)
+# Loading work.fifo(syn)
+run -all
+# ** Note: READDD
+#    Time: 160630 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Note: RX is NOT Ready
+#    Time: 160630 ns  Iteration: 1  Instance: /rx_tb/uut
+# ** Error: Mismatch in received data!
+#    Time: 160660 ns  Iteration: 0  Instance: /rx_tb
+# ** Failure: Testbench finished
+#    Time: 170660 ns  Iteration: 0  Process: /rx_tb/stimulus_process File: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+# Break in Process stimulus_process at /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl line 158
+# End time: 14:00:57 on Nov 07,2024, Elapsed time: 1:36:01
+# Errors: 2, Warnings: 1
