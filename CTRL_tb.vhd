@@ -36,7 +36,7 @@ architecture SimulationModel of CTRL_tb is
     signal snd_led : std_logic;
     signal wr : std_logic;
     signal rd : std_logic;
-    signal addr : std_logic_vector(2 downto 0) := (others => '1');
+    signal addr : std_logic_vector(2 downto 0);
 
     -- Clock period definition
     constant clk_period : time := 10 ns;
@@ -90,6 +90,9 @@ begin
             when "110" =>
                 databus <= "00000010"; -- FIFO Full
                 assert addr = "101" report "CTRL module should request data transfer" severity error;
+	    when others =>
+		assert databus = "ZZZZZZZZ" report "Databus is not in tri-state mode" severity error;
+		databus <= (others => 'Z');
         end case;
     end process;
     
