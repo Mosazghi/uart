@@ -54,9 +54,9 @@ begin
             databus  => databus,
             snd_led  => snd_led,
             wr       => wr,
-            rd       => rd
+            rd       => rd,
 				State    => State,
-				addr     => addr,
+				addr     => addr
         );
 
     -- Clock process definitions
