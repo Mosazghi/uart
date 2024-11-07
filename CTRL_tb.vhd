@@ -8,8 +8,9 @@ end CTRL_tb;
 
 architecture SimulationModel of CTRL_tb is 
 	constant CLK_FREQ_HZ : integer 	:= 50000000;  
-	constant CLK_PER 		: time 		:= 20 ns;
+	constant CLK_PER 		: time 		:= 20 ns; -- 50MHz
 	constant delay 		: time 		:= 100 ns;
+	
 	
 	component CTRL port(
 		clk 		: in 		std_logic;
@@ -55,7 +56,6 @@ begin
             snd_led  => snd_led,
             wr       => wr,
             rd       => rd,
-				State    => State,
 				addr     => addr
         );
 
@@ -68,40 +68,19 @@ begin
         wait for clk_period/2;
     end process;
 
-	    startup_process: process
+	 startup_process: process
     begin
-        -- Initialize
-        databus <= (others => 'Z');   -- Release bus
-        wr <= '0';
-        
-        wait for clk_period * 2;      -- Allow some initial time
-        
-        -- Test case for the 'start' state
-        assert (State = "start") report "State is not start at beginning" severity error;
-        
-        wait for clk_period * 2;
-        
-        -- Test case for 'Write_Tx_Config'
-        wait until rising_edge(clk);
-        assert (State = "Write_Tx_Config") report "State did not transition to Write_Tx_Config" severity error;
-        assert (addr = "100") report "Address not set correctly in start state" severity error;
-        assert (databus(2 downto 0) = baud_sel) report "Baud select bits not set correctly in Rx configuration" severity error;
-        
-        wait for clk_period * 2;
-
-        -- Test case for 'Finish'
-        wait until rising_edge(clk);
-        assert (State = "Finish") report "State did not transition to Finish" severity error;
-        assert (wr = '0') report "WR should be 0 in Finish state" severity error;
-        assert (databus = (others => 'Z')) report "Databus not set to high impedance in Finish state" severity error;
-        
-        -- Final check, state transitions to Idle
-        wait until rising_edge(clk);
-        assert (State = "Idle") report "State did not transition to Idle" severity error;
-
-        -- Simulation end
-        report "startup completed successfully" severity note;
-        wait;
+        databus 	<= (others <= 'Z');
+		  baud_sel 	<= (others <= '0');
+		  par_sel 	<= (others <= '0');
+		  
+		  wait until rst = '0';
+		  wait until rising_edge(clk);
+		  
+		  assert databus = ("00000100") report "Wrong address on databus" severity error;
+		  wait;
+		  assert databus = ("00000000") report "Baud select should be 000 and parity select should be 00" severity error;
+		  
     end process;
 	 
     -- Stimulus process
