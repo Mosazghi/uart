@@ -103,26 +103,33 @@ begin
 		
 				when Idle =>	
 					addr <= "110";    ------- addresse for hvor den skal lese
-					RoW('0'); -- lese
-				
-					
+					RoW('0'); -- lese	
 					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
 					
+					---------------disse er ikke strengt tatt viktig for oppgaven
+					
 					-- Sjekker Rx status 
-					if 	(databus(3) = '1') then
+					if (databus(3) = '1') then
 						-- Parity Error
+						state <= Idle;
+						
 					if (databus(2) = '1') then
 						-- Data Lost
+						
+						state <= Idle;
+						
 					if (databus(1) = '1') then
 						-- FIFO Full
-						
+						state <= Idle;
 						
 						State <= Get; ----------------- teste dette i testbench
 						
 						
-						
 					if (databus(0) = '1') then
 						-- FIFO Empty
+						
+						state <= Idle; -- vente på data
+						
 					else
 						state <= Idle;
 					end if;

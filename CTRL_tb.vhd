@@ -55,6 +55,8 @@ begin
             snd_led  => snd_led,
             wr       => wr,
             rd       => rd
+				State    => State,
+				addr     => addr,
         );
 
     -- Clock process definitions
@@ -66,6 +68,42 @@ begin
         wait for clk_period/2;
     end process;
 
+	    startup_process: process
+    begin
+        -- Initialize
+        databus <= (others => 'Z');   -- Release bus
+        wr <= '0';
+        
+        wait for clk_period * 2;      -- Allow some initial time
+        
+        -- Test case for the 'start' state
+        assert (State = "start") report "State is not start at beginning" severity error;
+        
+        wait for clk_period * 2;
+        
+        -- Test case for 'Write_Tx_Config'
+        wait until rising_edge(clk);
+        assert (State = "Write_Tx_Config") report "State did not transition to Write_Tx_Config" severity error;
+        assert (addr = "100") report "Address not set correctly in start state" severity error;
+        assert (databus(2 downto 0) = baud_sel) report "Baud select bits not set correctly in Rx configuration" severity error;
+        
+        wait for clk_period * 2;
+
+        -- Test case for 'Finish'
+        wait until rising_edge(clk);
+        assert (State = "Finish") report "State did not transition to Finish" severity error;
+        assert (wr = '0') report "WR should be 0 in Finish state" severity error;
+        assert (databus = (others => 'Z')) report "Databus not set to high impedance in Finish state" severity error;
+        
+        -- Final check, state transitions to Idle
+        wait until rising_edge(clk);
+        assert (State = "Idle") report "State did not transition to Idle" severity error;
+
+        -- Simulation end
+        report "Testbench completed successfully" severity note;
+        wait;
+    end process;
+	 
     -- Stimulus process
     stim_proc: process
     begin
@@ -100,6 +138,13 @@ begin
 		
 		end
 		  wait for 100 ns;
+		 
+		 if adr = "110"
+			
+		 
+		 
+		 
+		 
 		  
 		  
 
