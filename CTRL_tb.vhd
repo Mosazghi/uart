@@ -6,39 +6,37 @@ use work.uart_library.all;
 entity CTRL_tb is
 end CTRL_tb;
 
-architecture SimulationModel of ctrl_tb is 
-	constant CLK_FREQ_HZ : integer 	:= 50000000;  
-	constant CLK_PER 		: time 		:= 20 ns; -- 50MHz
-	constant delay 		: time 		:= 100 ns;
-	
-	
-	component CTRL port(
-		clk 		: in 		std_logic;
-		rst		: in 		std_logic; 
-		snd		: in 		std_logic;
-		baud_sel	: in 		std_logic_vector(2 downto 0);
-		par_sel	: in 		std_logic_vector(1 downto 0);
-		databus	: inout 	std_logic_vector(7 downto 0);
-		snd_led	: out 	std_logic;
-		wr 		: out 	std_logic;
-		rd 		: out 	std_logic;
-		addr 		: inout	std_logic_vector(2 downto 0)
-		);
-	end component CTRL;
-	
-	
-
--- Signals to connect to UUT
-    signal clk      : std_logic := '0';
-    signal rst      : std_logic := '0';
-    signal snd      : std_logic := '0';
+architecture SimulationModel of CTRL_tb is 
+    constant CLK_FREQ_HZ : integer := 50000000;  
+    constant CLK_PER : time := 20 ns; -- 50MHz
+    constant delay : time := 100 ns;
+    
+    component CTRL
+        port(
+            clk : in std_logic;
+            rst : in std_logic; 
+            snd : in std_logic;
+            baud_sel : in std_logic_vector(2 downto 0);
+            par_sel : in std_logic_vector(1 downto 0);
+            databus : inout std_logic_vector(7 downto 0);
+            snd_led : out std_logic;
+            wr : out std_logic;
+            rd : out std_logic;
+            addr : inout std_logic_vector(2 downto 0)
+        );
+    end component CTRL;
+    
+    -- Signals to connect to UUT
+    signal clk : std_logic := '0';
+    signal rst : std_logic := '0';
+    signal snd : std_logic := '0';
     signal baud_sel : std_logic_vector(2 downto 0) := (others => '0');
-    signal par_sel  : std_logic_vector(1 downto 0) := (others => '0');
-    signal databus  : std_logic_vector(7 downto 0) := (others => 'Z');
-    signal snd_led  : std_logic;
-    signal wr       : std_logic;
-    signal rd       : std_logic;
-    signal addr     : std_logic_vector(2 downto 0) := (others => '1');
+    signal par_sel : std_logic_vector(1 downto 0) := (others => '0');
+    signal databus : std_logic_vector(7 downto 0) := (others => 'Z');
+    signal snd_led : std_logic;
+    signal wr : std_logic;
+    signal rd : std_logic;
+    signal addr : std_logic_vector(2 downto 0) := (others => '1');
 
     -- Clock period definition
     constant clk_period : time := 10 ns;
@@ -48,20 +46,20 @@ begin
     -- Instantiate the Unit Under Test (UUT)
     uut: CTRL
         port map (
-            clk      => clk,
-            rst      => rst,
-            snd      => snd,
+            clk => clk,
+            rst => rst,
+            snd => snd,
             baud_sel => baud_sel,
-            par_sel  => par_sel,
-            databus  => databus,
-            snd_led  => snd_led,
-            wr       => wr,
-            rd       => rd,
-				addr     => addr
+            par_sel => par_sel,
+            databus => databus,
+            snd_led => snd_led,
+            wr => wr,
+            rd => rd,
+            addr => addr
         );
 
     -- Clock process definitions
-    clk_process :process
+    clk_process : process
     begin
         clk <= '0';
         wait for clk_period/2;
@@ -69,32 +67,32 @@ begin
         wait for clk_period/2;
     end process;
 
-	 startup_process: process
+    startup_process: process
     begin
-        	  databus <= (others => 'Z');
-		  baud_sel 	<= "100";
-		  par_sel 	<= "10";
-		  
-		  wait until rst = '0';
-		  wait until rising_edge(clk);
-		  
-		  case addr is 
-				when "000" =>
-					assert databus = ("00010100") report "TX config -- Wrong parity- and baud selection" severity error;
-				when "001" =>
-					assert databus = ("01011010") report "TX module should expect 'Z' character (01011010)" severity error;
-				when "010" =>
-					databus <= "00000001"; -- TX module busy
-				when "100" =>
-					assert databus = ("00010100") report "RX config -- Wrong parity- and baud selection" severity error;
-				when "101" =>
-					databus <= "01011010"; -- Character 'Z'
-				when "110" =>
-					databus <= "00000010"; -- FIFO Full
-					assert addr = ("101") report "CTRL module should request data transfer" severity error;
-			end case;
+        databus <= (others => 'Z');
+        baud_sel <= "100";
+        par_sel <= "10";
+        
+        wait until rst = '0';
+        wait until rising_edge(clk);
+        
+        case addr is 
+            when "000" =>
+                assert databus = "00010100" report "TX config -- Wrong parity- and baud selection" severity error;
+            when "001" =>
+                assert databus = "01011010" report "TX module should expect 'Z' character (01011010)" severity error;
+            when "010" =>
+                databus <= "00000001"; -- TX module busy
+            when "100" =>
+                assert databus = "00010100" report "RX config -- Wrong parity- and baud selection" severity error;
+            when "101" =>
+                databus <= "01011010"; -- Character 'Z'
+            when "110" =>
+                databus <= "00000010"; -- FIFO Full
+                assert addr = "101" report "CTRL module should request data transfer" severity error;
+        end case;
     end process;
-	 
+    
     -- Stimulus process
     stim_proc: process
     begin
@@ -103,10 +101,10 @@ begin
         wait for delay;
         rst <= '0';
 
-		      wait;
+        wait;
     end process;
-		  
-/*		  
+	 
+	 /*		  
 	 send_process: process
 		  variable counter : integer := 0;
     begin
@@ -164,11 +162,5 @@ begin
 
     
 */
-end architecture;
 
-
-
-
-
-
-
+end architecture SimulationModel;
