@@ -100,7 +100,7 @@ begin
         assert (State = "Idle") report "State did not transition to Idle" severity error;
 
         -- Simulation end
-        report "Testbench completed successfully" severity note;
+        report "startup completed successfully" severity note;
         wait;
     end process;
 	 
@@ -112,46 +112,66 @@ begin
         wait for 100 ns;
         rst <= '0';
 
-        -- insert stimulus here
-        wait for 20 ns;
-        snd <= '1';
-        wait for 20 ns;
+		      wait;
+    end process;
+		  
+		  
+		   send_process: process
+        variable counter : integer := 0;
+    begin
+        -- Initialize
         snd <= '0';
+        databus <= (others => 'Z');    -- Release bus
+        wait for clk_period * 2;
 
-        -- Test different baud and parity selections
-        baud_sel <= "001";
-        par_sel <= "01";
-        wait for 100 ns;
+        -- Drive UUT to Send state
+        state <= Send;
+        addr <= "010";                 -- Expecting address to check if Tx is ready
+        RoW <= '0';                    -- Setting read mode
 
-        baud_sel <= "010";
-        par_sel <= "10";
-        wait for 100 ns;
-		  
-		  
-		  
-		// Check if LED is ON
-		if (snd_led == 1) begin
-      report("Test Passed: LED is ON");
+        -- Test if Tx is ready: databus(0) = '1' to simulate ready state
+        databus <= "00000001";
+        wait for clk_period;
+
+        -- Test LED Blink Logic
+        assert (led_state = '1') report "LED should be on initially" severity error;
+        for i in 1 to timer_period * 2 loop
+            wait until rising_edge(clk);
+            if counter < timer_period then
+                counter := counter + 1;
+            else
+                counter := 0;
+                assert (led_state = not led_state) report "LED did not toggle after timer period" severity error;
+            end if;
+        end loop;
+
+        -- Test single send trigger
+        snd <= '1';
+        wait until rising_edge(clk);
+        assert (snd_led = led_state) report "snd_led did not match led_state after counter reset" severity error;
+        
+        -- Simulate Tx Ready to Send
+        databus <= "00000000";          -- Tx ready signal
+        snd <= '0';                     -- Button released
+        wait until rising_edge(clk);
+
+        -- Verify state transition to Idle and bus reset
+        wait until rising_edge(clk);
+        assert (state = Idle) report "State did not transition to Idle" severity error;
+        assert (addr = "001") report "Address was not set correctly for Tx data send" severity error;
+        assert (RoW = '1') report "RoW was not set to write for Tx data send" severity error;
+        assert (databus = (others => 'Z')) report "Databus was not reset to high impedance after sending" severity error;
+
+        -- Simulation End
+        report "Send test completed successfully" severity note;
+        wait;
+    end process;
 		
-		end else begin
-      report("Test Failed: LED is OFF");
-		
-		end
-		  wait for 100 ns;
-		 
-		 if adr = "110"
-			
-		 
-		 
-		 
-		 
-		  
 		  
 
         -- Add more stimulus as needed
 
-        wait;
-    end process;
+    
 
 end architecture;
 

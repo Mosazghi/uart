@@ -112,23 +112,27 @@ begin
 					if (databus(3) = '1') then
 						-- Parity Error
 						state <= Idle;
+						end if;
 						
 					if (databus(2) = '1') then
 						-- Data Lost
 						
 						state <= Idle;
+						end if;
 						
 					if (databus(1) = '1') then
 						-- FIFO Full
-						state <= Idle;
+						--state <= Idle;
 						
 						State <= Get; ----------------- teste dette i testbench
+						end if;
 						
 						
 					if (databus(0) = '1') then
 						-- FIFO Empty
 						
 						state <= Idle; -- vente på data
+						
 						
 					else
 						state <= Idle;
@@ -146,42 +150,42 @@ begin
 					end if;	
 					
 					
-					
 				when Send =>
-					addr <= "010";							-- Sjekker om Tx er klar til å motta data
-					RoW('0'); -- lese
-					sndfor <= snd;
-					
-					if (databus(0)= '1') then
-					-- BLINK LED
-					------------------------------------
-						if counter < timer_period then
-							counter  <=	counter +1;
+						addr <= "010";							-- Sjekker om Tx er klar til å motta data
+						RoW('0'); -- lese
+						sndfor <= snd;
+						
+						if (databus(0)= '1') then
+						-- BLINK LED
+						------------------------------------
+							if counter < timer_period then
+								counter  <=	counter +1;
+							else 
+								counter <= 0;
+								led_state <= not led_state;
+							end if;
 						else 
 							counter <= 0;
-							led_state <= not led_state;
+							led_state <= '1';	
 						end if;
-					else 
-						counter <= 0;
-						led_state <= '1';	
-					end if;
-					
-					snd_led <= led_state;
-					sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
-						-- TX BUSY
-					if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
-						addr <= "001";							-- Setter addresse for sending av data til Tx
-						RoW('1'); -- skrive
-						databus <= TxData; 					-- Sender data til Tx
-						databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
-						state <= Idle;
 						
-					else
-						state <= Send;
-					-- Tilbakemelding: husk å sjekke tx_busy osv før man sender
-					end if;
+						snd_led <= led_state;
+						sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
+							-- TX BUSY
+						if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
+							addr <= "001";							-- Setter addresse for sending av data til Tx
+							RoW('1'); -- skrive
+							databus <= TxData; 					-- Sender data til Tx
+							databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
+							state <= Idle;
+							
+						else
+							state <= Send;
+						
+						end if;
+						
 					
-			end case;
-		end if;
-	end process;
+				end case;		
+			END IF;
+		end process;
 end architecture;
