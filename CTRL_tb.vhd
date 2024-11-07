@@ -6,7 +6,7 @@ use work.uart_library.all;
 entity CTRL_tb is
 end CTRL_tb;
 
-architecture SimulationModel of CTRL_tb is 
+architecture SimulationModel of ctrl_tb is 
 	constant CLK_FREQ_HZ : integer 	:= 50000000;  
 	constant CLK_PER 		: time 		:= 20 ns; -- 50MHz
 	constant delay 		: time 		:= 100 ns;
@@ -38,6 +38,7 @@ architecture SimulationModel of CTRL_tb is
     signal snd_led  : std_logic;
     signal wr       : std_logic;
     signal rd       : std_logic;
+    signal addr     : std_logic_vector(2 downto 0) := (others => '1');
 
     -- Clock period definition
     constant clk_period : time := 10 ns;
@@ -45,7 +46,7 @@ architecture SimulationModel of CTRL_tb is
 begin
 
     -- Instantiate the Unit Under Test (UUT)
-    uut: ProjectUART
+    uut: CTRL
         port map (
             clk      => clk,
             rst      => rst,
@@ -70,7 +71,7 @@ begin
 
 	 startup_process: process
     begin
-        databus 	<= (others <= 'Z');
+        	  databus <= (others => 'Z');
 		  baud_sel 	<= "100";
 		  par_sel 	<= "10";
 		  
@@ -78,17 +79,17 @@ begin
 		  wait until rising_edge(clk);
 		  
 		  case addr is 
-				when "000"
+				when "000" =>
 					assert databus = ("00010100") report "TX config -- Wrong parity- and baud selection" severity error;
-				when "001"
+				when "001" =>
 					assert databus = ("01011010") report "TX module should expect 'Z' character (01011010)" severity error;
-				when "010"
+				when "010" =>
 					databus <= "00000001"; -- TX module busy
-				when "100"
+				when "100" =>
 					assert databus = ("00010100") report "RX config -- Wrong parity- and baud selection" severity error;
-				when "101"
+				when "101" =>
 					databus <= "01011010"; -- Character 'Z'
-				when "110"
+				when "110" =>
 					databus <= "00000010"; -- FIFO Full
 					assert addr = ("101") report "CTRL module should request data transfer" severity error;
 			end case;
@@ -164,7 +165,6 @@ begin
     
 */
 end architecture;
-
 
 
 
