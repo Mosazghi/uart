@@ -90,9 +90,9 @@ begin
             when "110" =>
                 databus <= "00000010"; -- FIFO Full
                 assert addr = "101" report "CTRL module should request data transfer" severity error;
-	    when others =>
-		assert databus = "ZZZZZZZZ" report "Databus is not in tri-state mode" severity error;
-		databus <= (others => 'Z');
+				when others =>
+					assert databus = "ZZZZZZZZ" report "Databus is not in tri-state mode" severity error;
+					databus <= (others => 'Z');
         end case;
     end process;
     

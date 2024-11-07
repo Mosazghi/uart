@@ -66,7 +66,8 @@ begin
                 --konfigurerer rx
 					 wr <= '1';				-- write
                 addr <= "100";  		-- Addresse rx
-					 databus <= ("00000" & addr);
+					 databus(7 downto 3) <= "00000";
+					 databus(2 downto 0) <= addr;
 					 
                 RxData(2 downto 0) <= baud_sel;
                 RxData(4 downto 3) <= par_sel;
@@ -88,11 +89,11 @@ begin
                 -- etter inialisering
 					 wr <= '0';-- slutt å skrive
                 databus <= (others => 'Z');
-					 RxData <= databus; 
-					 TxData <= databus;
+					 RxData <= (others => '0'); 
+					 TxData <= (others => '0');
                 addr <= (others => '1');
                 State <= Idle;
-                -- addresse bus er tatt til null
+                -- addresse bus er tatt til ubrukt adresse
 		
 				when Idle =>	
 					addr <= "110";    ------- addresse for hvor den skal lese
