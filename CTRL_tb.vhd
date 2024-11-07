@@ -13,30 +13,30 @@ architecture SimulationModel of CTRL_tb is
     
     component CTRL
         port(
-            clk : in std_logic;
-            rst : in std_logic; 
-            snd : in std_logic;
-            baud_sel : in std_logic_vector(2 downto 0);
-            par_sel : in std_logic_vector(1 downto 0);
-            databus : inout std_logic_vector(7 downto 0);
-            snd_led : out std_logic;
-            wr : out std_logic;
-            rd : out std_logic;
-            addr : inout std_logic_vector(2 downto 0)
+            clk 		: in 		std_logic;
+            rst 		: in 		std_logic; 
+            snd 		: in 		std_logic;
+            baud_sel	: in 		std_logic_vector(2 downto 0);
+            par_sel 	: in 		std_logic_vector(1 downto 0);
+            databus 	: inout 	std_logic_vector(7 downto 0);
+				addr 		: inout 	std_logic_vector(2 downto 0);
+            snd_led 	: out 	std_logic;
+            wr 		: out 	std_logic;
+            rd 		: out 	std_logic
         );
     end component CTRL;
     
     -- Signals to connect to UUT
-    signal clk : std_logic := '0';
-    signal rst : std_logic := '0';
-    signal snd : std_logic := '0';
-    signal baud_sel : std_logic_vector(2 downto 0) := (others => '0');
-    signal par_sel : std_logic_vector(1 downto 0) := (others => '0');
-    signal databus : std_logic_vector(7 downto 0) := (others => 'Z');
-    signal snd_led : std_logic;
-    signal wr : std_logic;
-    signal rd : std_logic;
-    signal addr : std_logic_vector(2 downto 0);
+    signal clk 		: std_logic := '0';
+    signal rst 		: std_logic := '0';
+    signal snd 		: std_logic := '0';
+    signal baud_sel 	: std_logic_vector(2 downto 0) := (others => '0');
+    signal par_sel 	: std_logic_vector(1 downto 0) := (others => '0');
+    signal databus 	: std_logic_vector(7 downto 0) := (others => 'Z');
+    signal snd_led 	: std_logic;
+    signal wr 			: std_logic;
+    signal rd 			: std_logic;
+    signal addr 		: std_logic_vector(2 downto 0);
 
     -- Clock period definition
     constant clk_period : time := 10 ns;
@@ -46,16 +46,16 @@ begin
     -- Instantiate the Unit Under Test (UUT)
     uut: CTRL
         port map (
-            clk => clk,
-            rst => rst,
-            snd => snd,
+            clk 		=> clk,
+            rst 		=> rst,
+            snd 		=> snd,
             baud_sel => baud_sel,
-            par_sel => par_sel,
-            databus => databus,
-            snd_led => snd_led,
-            wr => wr,
-            rd => rd,
-            addr => addr
+            par_sel 	=> par_sel,
+            databus 	=> databus,
+            snd_led 	=> snd_led,
+            wr 		=> wr,
+            rd 		=> rd,
+            addr 		=> addr
         );
 
     -- Clock process definitions
@@ -67,6 +67,7 @@ begin
         wait for clk_period/2;
     end process;
 
+	 
     startup_process: process
     begin
         databus <= (others => 'Z');
@@ -92,7 +93,7 @@ begin
                 assert addr = "101" report "CTRL module should request data transfer" severity error;
 				when others =>
 					assert databus = "ZZZZZZZZ" report "Databus is not in tri-state mode" severity error;
-					databus <= (others => 'Z');
+					databus <= "ZZZZZZZZ";
         end case;
     end process;
     

@@ -51,7 +51,7 @@ begin
         led_state <= '1'; ---- led på / default
         
         -- start verdi
-        addr 		<= (others => '0');
+        addr 		<= (others => '1');
         databus	<= (others => 'Z');
         RxData 	<= (others => '0');
         TxData 	<= (others => '0');
@@ -66,23 +66,13 @@ begin
                 --konfigurerer rx
 					 wr <= '1';				-- write
                 addr <= "100";  		-- Addresse rx
-					 databus(7 downto 3) <= "00000";
-					 databus(2 downto 0) <= addr;
-					 
-                RxData(2 downto 0) <= baud_sel;
-                RxData(4 downto 3) <= par_sel;
-                databus <= RxData;
-					 
+                databus <= "000" & par_sel & baud_sel;
                 State <= Write_Tx_Config;
             
             when Write_Tx_Config =>
                 --konfigurerer tx
                 addr <= "000";  -- Addresse  Tx
-					 databus <= ("00000" & addr);
-					 
-                TxData(2 downto 0) <= baud_sel;
-                TxData(4 downto 3) <= par_sel;
-                databus <= TxData;
+                databus <= "000" & par_sel & baud_sel;
                 State <= Finish;
             
             when Finish =>
