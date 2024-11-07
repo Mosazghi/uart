@@ -50,6 +50,7 @@ set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
 set_global_assignment -name VHDL_FILE UART.vhd
 set_global_assignment -name VHDL_FILE TX.vhd
 set_global_assignment -name VHDL_FILE TX_TB.vhd
+set_global_assignment -name VHDL_FILE UART_TB.vhd
 set_global_assignment -name VHDL_FILE RX.vhdl
 set_global_assignment -name VHDL_FILE CTRL.vhdl
 set_global_assignment -name QIP_FILE FIFO.qip

@@ -88,9 +88,5 @@ begin
         wait;
     end process test_process;
 
-end architecture testbench;
-
-
-
-
+end architecture SimulationModel;
 
