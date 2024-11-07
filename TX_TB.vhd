@@ -7,10 +7,6 @@ entity TX_tb is
 end TX_tb;
 
 architecture SimulationModel of TX_tb is
-
-  constant CLK_FREQ_HZ : integer := 50000000;  
-  constant CLK_PER : time := 20 ns;
-  constant delay : time := 100 ns;
   
   component TX
       port(
@@ -18,22 +14,28 @@ architecture SimulationModel of TX_tb is
         rst : in std_logic;
         Rd : in std_logic;
         Wr : in std_logic;
-        addr : in std_logic_vector(ADDR_BITS_N - 1 downto 0);
-        data_bus : inout std_logic_vector(DATA_BITS_N - 1 downto 0);
+        addr : in std_logic_vector(2 downto 0);
+        data_bus : inout std_logic_vector(7 downto 0);
         TxD : out std_logic
     );
   end component TX;
-
-  signal clk, rst, Rd, Wr : std_logic := '0';
-  signal addr : std_logic_vector(ADDR_BITS_N - 1 downto 0) := (others => '0');
-  signal data_bus : std_logic_vector(DATA_BITS_N - 1 downto 0);
-  signal TxD : std_logic;
-  signal baud_rate  : integer range 9600 to 115200 := 115200; -- Baud rate
-  signal baud_divider : integer;
+		
+	 --Testbench Signals
+    signal clk         : std_logic := '0';
+    signal rst_n       : std_logic := '0';
+    signal RxD         : std_logic := '1'; -- Idle state of UART line is '1'
+    signal data_bus    : std_logic_vector(7 downto 0);
+    signal addr        : std_logic_vector(2 downto 0);
+    signal rd          : std_logic := '0';
+    signal wr          : std_logic := '0';
   
-  signal data_bus_driver : std_logic_vector(DATA_BITS_N - 1 downto 0) := (others => '0');
-  
-  
+    -- UART Parameters
+    signal baud_rate_sel : std_logic_vector(2 downto 0) := "100"; -- Set default to 115200 baud
+	 
+	 -- Clock 
+    constant CLK_PERIOD : time := 20 ns;
+    constant BIT_PERIOD : time := 8681 ns; -- 115200 baud
+	 
 begin
 
   UUT: TX
@@ -48,44 +50,34 @@ begin
   );
 
   data_bus <= data_bus_driver when Wr = '1' else (others => 'Z');
-
-  p_clk: process
-  begin
-    clk <= '0';
-    wait for CLK_PER / 2;
-    clk <= '1';
-    wait for CLK_PER / 2;
-  end process p_clk;
   
+  --Clock generation
+  p_clk: process
+    begin
+        clk <= '0';
+        wait for CLK_PERIOD/2;
+        clk <= '1';
+        wait for CLK_PERIOD/2;
+    end process;
+  
+  --Stimulus process
   stimulus: process
-  begin
-    rst <= '1';
-    wait for delay;
-    rst <= '0';
-    wait for delay;
-    
-    data_bus_driver <= "00001010";
-    addr <= "000";
-    Wr <= '1';
-    wait for CLK_PER;
-    Wr <= '0';
-    wait for delay;
-    
-    data_bus_driver <= "10101010";
-    addr <= "001";
-    Wr <= '1';
-    wait for CLK_PER;
-    Wr <= '0';
-    wait for delay;
-    
-    addr <= "010";
-    Rd <= '1';
-    wait for CLK_PER;
-    Rd <= '0';
-    wait for delay;
-    
-    wait for 5000 ns;
-    wait;
+	 begin
+        rst <= '0';
+        wait for CLK_PERIOD * 10;
+        rst <= '1';
+        wait for CLK_PERIOD * 10;
+
+        wr <= '1';
+        addr <= "100"; 
+        data_bus <= "00000011"; 
+        wait for CLK_PERIOD ;
+        wr <= '0';
+        addr <= "ZZZ";
+        data_bus <= "ZZZZZZZZ";
+
+        wait for CLK_PERIOD * 10;
+ 
   end process stimulus;
 
 end architecture SimulationModel;
