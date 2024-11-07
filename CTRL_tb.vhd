@@ -79,7 +79,7 @@ begin
 		  
 		  case addr is 
 				when "000"
-					assert databus = ("00010100") report "TX congi -- Wrong parity- and baud selection" severity error;
+					assert databus = ("00010100") report "TX config -- Wrong parity- and baud selection" severity error;
 				when "001"
 					assert databus = ("01011010") report "TX module should expect 'Z' character (01011010)" severity error;
 				when "010"
@@ -99,13 +99,13 @@ begin
     begin
         -- hold reset state for 100 ns.
         rst <= '1';
-        wait for 100 ns;
+        wait for delay;
         rst <= '0';
 
 		      wait;
     end process;
 		  
-		  
+/*		  
 	 send_process: process
 		  variable counter : integer := 0;
     begin
@@ -162,7 +162,7 @@ begin
         -- Add more stimulus as needed
 
     
-
+*/
 end architecture;
 
 

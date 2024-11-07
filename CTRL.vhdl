@@ -64,9 +64,10 @@ begin
         
             when start =>
                 --konfigurerer rx
-                addr <= "100";  -- Addresse rx
-					 wr <= '1';			-- write
+					 wr <= '1';				-- write
+                addr <= "100";  		-- Addresse rx
 					 databus <= ("00000" & addr);
+					 
                 RxData(2 downto 0) <= baud_sel;
                 RxData(4 downto 3) <= par_sel;
                 databus <= RxData;
@@ -75,7 +76,9 @@ begin
             
             when Write_Tx_Config =>
                 --konfigurerer tx
-                addr <= "000";  -- Addresse  Tx 
+                addr <= "000";  -- Addresse  Tx
+					 databus <= ("00000" & addr);
+					 
                 TxData(2 downto 0) <= baud_sel;
                 TxData(4 downto 3) <= par_sel;
                 databus <= TxData;
@@ -87,7 +90,7 @@ begin
                 databus <= (others => 'Z');
 					 RxData <= databus; 
 					 TxData <= databus;
-                addr <= (others => '0');
+                addr <= (others => '1');
                 State <= Idle;
                 -- addresse bus er tatt til null
 		
@@ -102,30 +105,24 @@ begin
 					if (databus(3) = '1') then
 						-- Parity Error
 						state <= Idle;
-						end if;
+					end if;
 						
 					if (databus(2) = '1') then
 						-- Data Lost
 						
 						state <= Idle;
-						end if;
+					end if;
 						
 					if (databus(1) = '1') then
 						-- FIFO Full
 						--state <= Idle;
 						
 						State <= Get; ----------------- teste dette i testbench
-						end if;
-						
+					end if;
 						
 					if (databus(0) = '1') then
 						-- FIFO Empty
-						
 						state <= Idle; -- vente på data
-						
-						
-					else
-						state <= Idle;
 					end if;
 					rd <= '0';
 					
