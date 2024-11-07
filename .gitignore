@@ -1,8 +1,7 @@
 
 # Working with Altera Quartus II (Q2) and do proper versioning is not that easy
 # but if you follow some rules it can be accomplished. :)
-# This file should be placed into the main directory where the .qpf file is
-# found. Generally Q2 throws all entities and so on in the main directory, but
+# This file should be placed into the main directory where the .qpf file is found. Generally Q2 throws all entities and so on in the main directory, but
 # you can place all stuff also in separate folders. This approach is followed
 # here. So when you create a new design create one or more folders where your
 # entities will be located and put a .gitignore in there that overrides the
@@ -65,6 +64,10 @@
 */testbench/
 */*_sim/
 incremental_db/
-db/
 _output_files/
 PLLJ_PLLSPE_INFO.txt
+db/
+greybox_tmp/
+output_files/
+work/
+*/work/

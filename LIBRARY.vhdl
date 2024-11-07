@@ -1,8 +1,27 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 package uart_library is
 	constant CLOCK_FREQ_HZ : integer := 50_000_000/10; 
+  -- Baud Rate       Divider
+  constant DIV_9600     : integer := 5208;  -- 9600 baud
+  constant DIV_19200    : integer := 2604;  -- 19200 baud
+  constant DIV_38400    : integer := 1302;  -- 38400 baud
+  constant DIV_57600    : integer := 868;   -- 57600 baud
+  constant DIV_115200   : integer := 434;   -- 115200 baud
+
+  -- Array of baud rate dividers for easy lookup
+  type baud_div_array is array (0 to 4) of integer;
+  constant baud_dividers : baud_div_array := (
+    DIV_115200,   -- "000" => 115200 baud
+    DIV_57600,   -- "001" => 57600 baud
+    DIV_38400,   -- "010" => 38400 baud
+    DIV_19200,   -- "011" => 19200 baud
+    DIV_9600    -- "100" => 9600 baud
+  );
+
+
   -- Address constants for TX registers
   constant TX_CONFIG_A  : std_logic_vector(2 downto 0) := "000";
   constant TX_DATA_A    : std_logic_vector(2 downto 0) := "001";
@@ -33,7 +52,7 @@ package uart_library is
   constant RX_BAUD_E    : integer := 0;
 
   -- Index constants for RxDATA
-  constant RX_DATA_S    : integer := 7;
+  constant RX_DATA_S    : integer := 7; 
   constant RX_DATA_E    : integer := 0;
 
   -- Index constants for RxSTATUS
@@ -45,6 +64,7 @@ package uart_library is
   -- Number of data bits
   constant DATA_BITS_N : integer := 8;
   constant ADDR_BITS_N : integer := 3;
+
 
 end package uart_library;
 
