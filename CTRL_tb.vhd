@@ -127,7 +127,7 @@ begin
         -- Drive UUT to Send state
         state <= Send;
         addr <= "010";                 -- Expecting address to check if Tx is ready
-        RoW <= '0';                    -- Setting read mode
+        RoW('0');                    -- Setting read mode
 
         -- Test if Tx is ready: databus(0) = '1' to simulate ready state
         databus <= "00000001";
@@ -159,7 +159,7 @@ begin
         wait until rising_edge(clk);
         assert (state = Idle) report "State did not transition to Idle" severity error;
         assert (addr = "001") report "Address was not set correctly for Tx data send" severity error;
-        assert (RoW = '1') report "RoW was not set to write for Tx data send" severity error;
+        assert (wr = '1') report " was not set to write for Tx data send" severity error;
         assert (databus = (others => 'Z')) report "Databus was not reset to high impedance after sending" severity error;
 
         -- Simulation End
