@@ -71,16 +71,27 @@ begin
 	 startup_process: process
     begin
         databus 	<= (others <= 'Z');
-		  baud_sel 	<= (others <= '0');
-		  par_sel 	<= (others <= '0');
+		  baud_sel 	<= "100";
+		  par_sel 	<= "10";
 		  
 		  wait until rst = '0';
 		  wait until rising_edge(clk);
 		  
-		  assert databus = ("00000100") report "Wrong address on databus" severity error;
-		  wait;
-		  assert databus = ("00000000") report "Baud select should be 000 and parity select should be 00" severity error;
-		  
+		  case addr is 
+				when "000"
+					assert databus = ("00010100") report "TX congi -- Wrong parity- and baud selection" severity error;
+				when "001"
+					assert databus = ("01011010") report "TX module should expect 'Z' character (01011010)" severity error;
+				when "010"
+					databus <= "00000001"; -- TX module busy
+				when "100"
+					assert databus = ("00010100") report "RX config -- Wrong parity- and baud selection" severity error;
+				when "101"
+					databus <= "01011010"; -- Character 'Z'
+				when "110"
+					databus <= "00000010"; -- FIFO Full
+					assert addr = ("101") report "CTRL module should request data transfer" severity error;
+			end case;
     end process;
 	 
     -- Stimulus process

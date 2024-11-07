@@ -12,7 +12,7 @@ entity CTRL is port(
 	snd_led	: out 	std_logic;
 	wr 		: out 	std_logic;
 	rd 		: out 	std_logic;
-	addr 		: inout		std_logic_vector(2 downto 0)
+	addr 		: inout	std_logic_vector(2 downto 0)
 	);
 end entity;
 
