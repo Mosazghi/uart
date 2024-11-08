@@ -60,6 +60,8 @@ begin
 		  
         
     elsif rising_edge(clk) then
+	 rd <= '0'; 
+	 wr <= '0';
         case State is
         
             when start =>
@@ -115,7 +117,7 @@ begin
 						-- FIFO Empty
 						state <= Idle; -- vente på data
 					end if;
-					rd <= '0';
+					
 					
 				when Get =>
 					addr <= "101";		-- Setter addresse til å motta data fra Rx
@@ -127,7 +129,7 @@ begin
 					else
 						State <= Get;
 					end if;	
-					rd <= '0';
+				
 					
 					
 				when Send =>
@@ -148,7 +150,7 @@ begin
 							counter <= 0;
 							led_state <= '1';	
 						end if;
-						rd <= '0';
+						
 						
 						snd_led <= led_state;
 						sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
@@ -158,9 +160,8 @@ begin
 							wr <= '1'; -- skrive
 							databus <= TxData; 					-- Sender data til Tx
 							databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
-							wr <= '0';
-							state <= Idle;
 							
+							state <= Idle;
 						else
 							state <= Send;
 						
