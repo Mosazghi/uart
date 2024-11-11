@@ -121,7 +121,7 @@ begin
 					
 				when Get =>
 					addr <= "101";		-- Setter addresse til å motta data fra Rx
-					rd <= '1'; -- lese
+					rd<= '1'; -- lese
 					
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
 						TxData <= databus;	-- Gjør dataen klar for sending til Tx
