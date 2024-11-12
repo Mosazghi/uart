@@ -9,7 +9,7 @@ package uart_library is
   constant DIV_19200    : integer := 2604;  -- 19200 baud
   constant DIV_38400    : integer := 1302;  -- 38400 baud
   constant DIV_57600    : integer := 868;   -- 57600 baud
-  constant DIV_115200   : integer := 800;   -- 115200 baud
+  constant DIV_115200   : integer := 434;   -- 115200 baud
 
   -- Array of baud rate dividers for easy lookup
   type baud_div_array is array (0 to 4) of integer;

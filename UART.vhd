@@ -23,7 +23,7 @@ architecture Behavioral of UART is
     signal wr         	: std_logic;                        -- Write signal
     signal rd         	: std_logic;    							-- Read signal
 	 signal addr      	: std_logic_vector(2 downto 0);		-- Address for register selection
-	 signal snd_led      : std_logic;
+	 --signal snd_led      : std_logic;
 	
 begin
 		

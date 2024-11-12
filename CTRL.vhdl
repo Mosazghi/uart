@@ -12,7 +12,7 @@ entity CTRL is port(
 	snd_led	: out 	std_logic;
 	wr 		: out 	std_logic;
 	rd 		: out 	std_logic;
-	addr 		: inout		std_logic_vector(2 downto 0)
+	addr 		: inout	std_logic_vector(2 downto 0)
 	);
 end entity;
 
@@ -30,16 +30,36 @@ architecture RTL of CTRL is
 	--signal addr			: std_logic_vector(2 downto 0);
 	signal led_state	: std_logic := '1'; 
 	signal counter		: integer := 0;
-	constant timer_period : integer := 50000000 / 20;  
+	constant timer_period : integer := 1;  --- NB!!!!!! Husk å endre tilbake til 50000000/20 for 50ms intervaller
 	
 	
 	
 	signal sndfor : std_logic := '1'; --- hjelpe signaler for å lage trykk knappen
 	signal sndnaa : std_logic := '0';
+	signal blink  : std_logic;
 	
 	
 	
 begin
+
+
+process (clk)
+begin
+	if (rising_edge(clk)) then
+		if blink = '1' then
+			-- BLINK LED ------------------------------------
+			if counter < timer_period then
+				counter  <=	counter +1;
+			else 
+				counter <= 0;
+				led_state <= not led_state;
+			end if;
+		else
+			counter <= 0;
+			led_state <= '1';
+		end if;
+	end if;
+end process;
 
 
 
@@ -48,10 +68,10 @@ begin
     if rst = '0' then
         State <= start;
 		  
-        led_state <= '1'; ---- led på / default
+        snd_led <= '1'; ---- led på / default
         
         -- start verdi
-        addr 		<= (others => '0');
+        addr 		<= (others => '1');
         databus	<= (others => 'Z');
         RxData 	<= (others => '0');
         TxData 	<= (others => '0');
@@ -64,121 +84,106 @@ begin
         
             when start =>
                 --konfigurerer rx
-                addr <= "100";  -- Addresse rx
-					 wr <= '1';			-- write
-					 databus <= ("00000" & addr);
-                RxData(2 downto 0) <= baud_sel;
-                RxData(4 downto 3) <= par_sel;
-                databus <= RxData;
-					 
+		snd_led <= '1';
+		wr <= '1';				-- write
+                addr <= "100";  		-- Addresse rx
+                databus <= "000" & par_sel & baud_sel;
                 State <= Write_Tx_Config;
             
             when Write_Tx_Config =>
                 --konfigurerer tx
-                addr <= "000";  -- Addresse  Tx 
-                TxData(2 downto 0) <= baud_sel;
-                TxData(4 downto 3) <= par_sel;
-                databus <= TxData;
+                addr <= "000";  -- Addresse  Tx
+                databus <= "000" & par_sel & baud_sel;
                 State <= Finish;
             
             when Finish =>
                 -- etter inialisering
-					 wr <= '0'-- slutt å skrive
+					 wr <= '0';-- slutt å skrive
                 databus <= (others => 'Z');
-					 RxData <= databus; 
-					 TxData <= databus;
-                addr <= (others => '0');
+					 RxData <= (others => '0'); 
+					 TxData <= (others => '0');
+                addr <= (others => '1');
                 State <= Idle;
-                -- addresse bus er tatt til null
+                -- addresse bus er tatt til ubrukt adresse
 		
-				when Idle =>	
+				when Idle =>
+					databus <= (others => 'Z');
 					addr <= "110";    ------- addresse for hvor den skal lese
+					wr <= '0'; -- ikke skrive
 					rd <= '1'; -- lese	
 					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
 					
 					---------------disse er ikke strengt tatt viktig for oppgaven
 					
 					-- Sjekker Rx status 
+/*
 					if (databus(3) = '1') then
 						-- Parity Error
 						state <= Idle;
-						end if;
+					end if;
 						
 					if (databus(2) = '1') then
 						-- Data Lost
 						
 						state <= Idle;
-						end if;
-						
+					end if;
+					
+					if (databus(0) = '1') then
+						-- FIFO Empty
+						state <= Idle; -- vente på data
+					end if;
+*/
 					if (databus(1) = '1') then
 						-- FIFO Full
 						--state <= Idle;
-						
+						RxData <= databus;
 						State <= Get; ----------------- teste dette i testbench
-						end if;
-						
-						
-					if (databus(0) = '1') then
-						-- FIFO Empty
-						
-						state <= Idle; -- vente på data
-						
-						
-					else
-						state <= Idle;
+						rd <= '0';
+					else 
+						State <= Idle;
 					end if;
-					rd <= '0';
-					
+						
 				when Get =>
 					addr <= "101";		-- Setter addresse til å motta data fra Rx
 					rd <= '1'; -- lese
 					
 					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
+						rd <= '0';
 						TxData <= databus;	-- Gjør dataen klar for sending til Tx
+						databus <= (others => 'Z');		-- og resetter databussen til tristate
 						state <= Send;		-- Setter status til sending
 					else
 						State <= Get;
 					end if;	
-					rd <= '0';
+					
 					
 					
 				when Send =>
 						addr <= "010";							-- Sjekker om Tx er klar til å motta data
 						rd <= '1'; -- lese
-						sndfor <= snd;
-						
-						if (databus(0)= '1') then
-						-- BLINK LED
-						------------------------------------
-							if counter < timer_period then
-								counter  <=	counter +1;
+						sndnaa <= snd;
+						if (addr = "010") then
+							if (databus = "00000001") then
+								blink <= '1';
 							else 
-								counter <= 0;
-								led_state <= not led_state;
+								blink <= '0';
 							end if;
-						else 
-							counter <= 0;
-							led_state <= '1';	
 						end if;
-						rd <= '0';
-						
 						snd_led <= led_state;
-						sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
+						--sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
 							-- TX BUSY
-						if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
+						if (databus = "ZZZZZZZZ" and snd = '1') then	-- Venter til Tx er klar og sendeknapp er initiert
 							addr <= "001";							-- Setter addresse for sending av data til Tx
+							rd <= '0';
 							wr <= '1'; -- skrive
 							databus <= TxData; 					-- Sender data til Tx
-							databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
-							wr <= '0';
+							--databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
 							state <= Idle;
 							
 						else
 							state <= Send;
 						
 						end if;
-						
-					
 				end case;		
 			END IF;
 		end process;
