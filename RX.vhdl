@@ -23,7 +23,7 @@ architecture RTL of RX is
   constant OS_DIV_19200    : integer := 325;  -- 19200 baud with 8x oversampling
   constant OS_DIV_38400    : integer := 163;  -- 38400 baud with 8x oversampling
   constant OS_DIV_57600    : integer := 108;  -- 57600 baud with 8x oversampling
-  constant OS_DIV_115200   : integer := 54;  -- 115200 baud with 8x oversampling
+  constant OS_DIV_115200   : integer := 100;  -- 115200 baud with 8x oversampling
 
   -- Array for oversampling dividers (local to RX module)
   type os_div_array is array (0 to 4) of integer;
@@ -151,11 +151,10 @@ begin
                 data_lost <= '0';
                 rx_start <= '0';
                 wrreq <= '0'; 
+                rdreq <= '0';
               elsif rising_edge(clk) then
                   case state is
                     when IDLE => 
-                     wrreq <= '0';  
-                       rdreq <= '0'; 
                       rx_ready <= '0';
                       rx_done <= '0';
                       if RxD = '0' then
@@ -163,16 +162,18 @@ begin
                         state <= START;
                       end if;
                     when START => -- sample start bit 
+                      -- if baud_tick = '1' then
                       if os_tick = '1' then 
                         if count_ones_middle_six(sample_buf) < 3 then -- Start bit verified (# 1's < # 0's)
-                          --report "START BIT VERIFIED";
                           state <= DATA;
                           else  --false start bit 
                             state <= IDLE;
                         end if; 
                       end if; 
+                      -- end if; 
                                           
                     when DATA => -- sample data bits 
+                      -- if baud_tick = '1' then
                         if os_tick = '1' then 
                           if count_ones_middle_six(sample_buf) > 3 then 
                             v_majority_bit := '1';
@@ -185,10 +186,8 @@ begin
                           
                           if v_bit_count = 8 then
                             if fifo_full = '0' then
-                              --report "BYTE RECEIVED";
                               wrreq <= '1';  
                               in_fifo_buf <= v_rx_data_buf;
-                            rdreq <= '1'; 
                             end if; 
                             v_bit_count := 0;
                             v_majority_bit := '0';
@@ -196,19 +195,21 @@ begin
                             state <= STOP;
                           end if;
                         end if;
+                      -- end if;
 
                     when STOP => --sample stop bit 
+                      -- if baud_tick = '1' then
                         if os_tick = '1' then 
                           if count_ones_middle_six(sample_buf) > 3 then -- Stop bit verified (# 1's > # 0's)
-                            --report "STOP BIT VERIFIED";
                             rx_ready <= '1';
+                            state <= IDLE;
                             else  --false stop bit 
-                              null; --FIXME: handle false stop bit 
+                              state <= IDLE;
                           end if; 
-                          state <= IDLE;
                           rx_done <= '1';
                           rx_start <= '0';
                         end if; 
+                      -- end if; 
                   end case;
               end if;
             end process p_main;
@@ -227,13 +228,14 @@ begin
                 if rd = '1' then
                   case addr is
                     when RX_DATA_A =>
-                      report "READ DATA";
-                      if fifo_empty = '0' then --NOTE: Necessary to check rx_ready as well? Don't think so.
+                      report "READDD";
+                      if fifo_empty = '0' and rx_ready ='1' then
+                        report "RX is Ready";
                         data_bus <= out_fifo_buf;
+                      else
+                        report "RX is NOT Ready";
                       end if;
-                      
                     when RX_STATUS_A =>
-                      report "STATUS";
                       data_bus <= "0000" & parity_err & data_lost & fifo_full & fifo_empty;
                     when others =>
                       null;
@@ -243,7 +245,6 @@ begin
                 if wr = '1' then
                   case addr is
                     when RX_CONFIG_A =>
-                      report "CONFIG";
                       baud_rate <= data_bus(RX_BAUD_S downto RX_BAUD_E);
                       parity <= data_bus(RX_PARITY_S downto RX_PARITY_E);
                       baud_divider <= baud_dividers(to_integer(unsigned(baud_rate)));
