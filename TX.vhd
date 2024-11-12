@@ -42,7 +42,7 @@ begin
     -- Tri-state buffer for data bus
     data_bus <= data_out when Rd = '1' else (others => 'Z');
 
-    -- Process for Baud
+    -- Process for Baud Rate Generation
     p_baud : process(clk, rst)
     begin
         if rst = '0' then
@@ -82,12 +82,12 @@ begin
 
                     when START =>
                         tx_busy <= '1';  
-                        TxD <= '0';       -- Drive the start bit
+                        TxD <= '0';       
                         bit_count <= 0;  
                         state <= DATA;
 
                     when DATA =>
-                        if bit_count < 8 then
+                        if bit_count < DATA_BITS_N then
                             TxD <= tx_data_buf(bit_count); 
                             bit_count <= bit_count + 1;
                         else
@@ -95,8 +95,8 @@ begin
                         end if;
 
                     when STOP =>
-                        TxD <= '1';       -- Stop bit
-                        tx_busy <= '0';   -- Clear busy status
+                        TxD <= '1';       
+                        tx_busy <= '0';   
                         state <= IDLE;
 
                     when others =>
@@ -106,47 +106,42 @@ begin
         end if;
     end process p_main;
 
--- Process to/from CTRL
-p_ctrl: process(clk, rst)
-begin
-    if rst = '0' then
-        
-    elsif rising_edge(clk) then
+    -- Process to/from CTRL
+    p_ctrl: process(clk, rst)
+    begin
+        if rst = '0' then
+            data_out <= (others => 'Z');
+            baud_rate <= "000";    -- Default baud rate (115200)
+        elsif rising_edge(clk) then
+            -- Read
+            if Rd = '1' then
+                case addr is
+                    when TX_STATUS_A =>
+                        data_out <= "0000000" & tx_busy; 
+                    when TX_CONFIG_A =>
+                        data_out <= (others => '0');      
+                    when others =>
+                        data_out <= (others => '0');     
+                end case;
+            else
+                data_out <= (others => 'Z');  
+            end if;
 
-        -- Read
-        if Rd = '1' then
-            case addr is
-                when TX_STATUS_A =>
-                    data_out <= "0000000" & tx_busy; 
-                when TX_CONFIG_A =>
-                    data_out <= (others => '0');      
-                when others =>
-                    data_out <= (others => '0');     
-            end case;
-        else
-            data_out <= (others => 'Z');  
+            -- Write
+            if Wr = '1' then
+                case addr is
+                    when TX_CONFIG_A =>
+                        baud_rate <= data_bus(TX_BAUD_S downto TX_BAUD_E);
+                        parity <= data_bus(TX_PARITY_S downto TX_PARITY_E);
+                        baud_divider <= baud_dividers(to_integer(unsigned(baud_rate)));  
+                    when TX_DATA_A =>
+                        tx_data <= data_bus;   
+                    when others =>
+                        null; 
+                end case;
+            end if;
         end if;
-
-        -- Write
-        if Wr = '1' then
-            case addr is
-                when TX_CONFIG_A =>
-                    baud_rate <= data_bus(TX_BAUD_S downto TX_BAUD_E);
-                    parity <= data_bus(TX_PARITY_S downto TX_PARITY_E);
-						  baud_divider <= baud_dividers(to_integer(unsigned(baud_rate)));
-
-                when TX_DATA_A =>
-                    tx_data <= data_bus; 
-
-                when others =>
-                    null; 
-            end case;
-
-
-        end if;
-    end if;
-end process p_ctrl;
+    end process p_ctrl;
 
 end architecture RTL;
-
 

@@ -20,64 +20,77 @@ architecture SimulationModel of TX_tb is
     );
   end component TX;
 		
-	 --Testbench Signals
+    -- Testbench Signals
     signal clk         : std_logic := '0';
-    signal rst_n       : std_logic := '0';
-    signal RxD         : std_logic := '1'; -- Idle state of UART line is '1'
+    signal rst         : std_logic := '0';
+    signal TxD         : std_logic;
     signal data_bus    : std_logic_vector(7 downto 0);
+    signal data_bus_driver : std_logic_vector(7 downto 0) := (others => '0');
     signal addr        : std_logic_vector(2 downto 0);
     signal rd          : std_logic := '0';
     signal wr          : std_logic := '0';
-  
+
     -- UART Parameters
-    signal baud_rate_sel : std_logic_vector(2 downto 0) := "100"; -- Set default to 115200 baud
-	 
-	 -- Clock 
     constant CLK_PERIOD : time := 20 ns;
-    constant BIT_PERIOD : time := 8681 ns; -- 115200 baud
 	 
 begin
 
-  UUT: TX
-  port map(
-    clk => clk,
-    rst => rst,
-    Rd => Rd,
-    Wr => Wr,
-    addr => addr,
-    data_bus => data_bus,
-    TxD => TxD
-  );
+    UUT: TX
+        port map(
+            clk => clk,
+            rst => rst,
+            Rd => rd,
+            Wr => wr,
+            addr => addr,
+            data_bus => data_bus,
+            TxD => TxD
+        );
 
-  data_bus <= data_bus_driver when Wr = '1' else (others => 'Z');
+    data_bus <= data_bus_driver when wr = '1' else (others => 'Z');
   
-  --Clock generation
-  p_clk: process
+    -- Clock generation
+    p_clk: process
     begin
         clk <= '0';
         wait for CLK_PERIOD/2;
         clk <= '1';
         wait for CLK_PERIOD/2;
     end process;
-  
-  --Stimulus process
-  stimulus: process
-	 begin
+
+    -- Stimulus process
+    stimulus: process
+    begin
+        -- Apply Reset
         rst <= '0';
         wait for CLK_PERIOD * 10;
         rst <= '1';
         wait for CLK_PERIOD * 10;
 
+        -- Set baud rate to 115200 
         wr <= '1';
-        addr <= "100"; 
-        data_bus <= "00000011"; 
-        wait for CLK_PERIOD ;
+        addr <= TX_CONFIG_A;        
+        data_bus_driver <= "00000000"; 
+        wait for CLK_PERIOD;
         wr <= '0';
         addr <= "ZZZ";
-        data_bus <= "ZZZZZZZZ";
-
+        data_bus_driver <= "ZZZZZZZZ";
+		  
+        -- Wait for configuration 
         wait for CLK_PERIOD * 10;
- 
-  end process stimulus;
+
+        -- Send data to TX
+        wr <= '1';
+        addr <= TX_DATA_A;          
+        data_bus_driver <= "01010101"; -- Example data to send
+        wait for CLK_PERIOD;
+        wr <= '0';
+        addr <= "ZZZ";
+        data_bus_driver <= "ZZZZZZZZ";
+
+        -- Wait for TX to complete
+        wait for CLK_PERIOD * 100;
+
+        assert false report "Testbench finished" severity failure;
+    end process stimulus;
 
 end architecture SimulationModel;
