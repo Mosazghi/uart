@@ -1,4 +1,4 @@
-/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl {0 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl {1 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -7,17 +7,24 @@ Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 
 -- Loading package uart_library
 -- Compiling entity RX_tb
 -- Compiling architecture behavior of RX_tb
-** Error: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl(158): near "assert": (vcom-1576) expecting == or '+' or '-' or '&'.
-** Note: /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl(160): VHDL Compiler exiting
 
-} {10.0 11.0} {}} /home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl {1 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl
+} {} {}} /home/mosa/NTNU/IELEG2113/uart/FIFO.vhd {1 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/FIFO.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity FIFO
+-- Compiling architecture SYN of fifo
+
+} {} {}} /home/mosa/NTNU/IELEG2113/uart/RX.vhdl {1 {vcom -work work -2002 -explicit -stats=none /home/mosa/NTNU/IELEG2113/uart/RX.vhdl
 Model Technology ModelSim - Intel FPGA Edition vcom 2020.1 Compiler 2020.02 Feb 28 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling package uart_library
--- Compiling package body uart_library
 -- Loading package uart_library
+-- Compiling entity RX
+-- Compiling architecture RTL of RX
+-- Loading entity FIFO
 
 } {} {}}
