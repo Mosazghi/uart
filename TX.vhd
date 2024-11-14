@@ -42,7 +42,7 @@ begin
     -- Tri-state buffer for data bus
     data_bus <= data_out when Rd = '1' else (others => 'Z');
 
-    -- Process for Baud Rate Generation
+    -- Process for Baud 
     p_baud : process(clk, rst)
     begin
         if rst = '0' then
