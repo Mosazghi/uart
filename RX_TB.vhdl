@@ -159,44 +159,48 @@ begin
         end if;
     end check_received_data;
      
+        variable char : std_logic_vector(7 downto 0);
     begin
-      tb_init;
-      -- tb_reset;
-      rst_n <= '0';
-      wait for CLK_PERIOD;
-      rst_n <= '1';
-      configure_baud_rate;
+        tb_init;
+        -- tb_reset;
+        rst_n <= '0';
+        wait for CLK_PERIOD;
+        rst_n <= '1';
+        configure_baud_rate;
 
-      wait_for_not_full_and_send_data("10101000"); -- H
-      read_rx_data;
-      check_received_data("10101000");
+        char := "01001000"; -- H
 
-      wait for BIT_PERIOD;
-      wait_for_not_full_and_send_data("01000101"); -- E
-      read_rx_data;
-      check_received_data("01000101");
-      
+        wait_for_not_full_and_send_data(char);
+        read_rx_data;
+        check_received_data(char);
 
-      wait for BIT_PERIOD;
-      wait_for_not_full_and_send_data("01001100"); -- L
-      read_rx_data;
-      check_received_data("01001100");
+        wait for BIT_PERIOD;
+        char := "01000101"; -- E
 
-      wait for BIT_PERIOD;
-      wait_for_not_full_and_send_data("01001100"); -- L
-      read_rx_data;
-      check_received_data("01001100");
+        wait_for_not_full_and_send_data(char);
+        read_rx_data;
+        check_received_data(char);
 
-      wait for BIT_PERIOD;
-      wait_for_not_full_and_send_data("01001111"); -- O
-      read_rx_data;
-      check_received_data("01001111");
 
-      wait for BIT_PERIOD;
-      wait_for_not_full_and_send_data("01001000"); -- H
-      read_rx_data;
-      check_received_data("01001000");
-      wait for 10000 ns;
-      assert false report "Testbench finished" severity failure;
+        wait for BIT_PERIOD;
+        char := "01001100";
+        wait_for_not_full_and_send_data(char); -- L
+        read_rx_data;
+        check_received_data(char);
+
+        wait for BIT_PERIOD;
+        char := "01001100";
+        wait_for_not_full_and_send_data(char); -- L
+        read_rx_data;
+        check_received_data(char);
+
+        wait for BIT_PERIOD;
+        char := "01001111";
+        wait_for_not_full_and_send_data(char); -- O
+        read_rx_data;
+        check_received_data(char);
+
+        wait for 10000 ns;
+        assert false report "Testbench finished" severity failure;
     end process;
 end behavior;

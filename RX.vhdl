@@ -154,14 +154,14 @@ begin
               elsif rising_edge(clk) then
                   case state is
                     when IDLE => 
-                     wrreq <= '0';  
-                       rdreq <= '0'; 
-                      rx_ready <= '0';
-                      rx_done <= '0';
-                      if RxD = '0' then
-                        rx_start <= '1';
-                        state <= START;
-                      end if;
+                        wrreq <= '0';  
+                        rdreq <= '0'; 
+                        rx_ready <= '0';
+                        rx_done <= '0';
+                        if RxD = '0' then
+                            rx_start <= '1';
+                            state <= START;
+                        end if;
                     when START => -- sample start bit 
                       if os_tick = '1' then 
                         if count_ones_middle_six(sample_buf) < 3 then -- Start bit verified (# 1's < # 0's)
