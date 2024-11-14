@@ -6,7 +6,7 @@ use work.uart_library.all;
 entity TX is
     port(
         clk : in std_logic;
-        rst : in std_logic;
+        rst : in std_logic;  
         Rd : in std_logic;
         Wr : in std_logic;
         addr : in std_logic_vector(ADDR_BITS_N - 1 downto 0); 
@@ -22,8 +22,6 @@ architecture RTL of TX is
 
     signal tx_data : std_logic_vector(DATA_BITS_N - 1 downto 0);   
     signal tx_data_buf : std_logic_vector(DATA_BITS_N - 1 downto 0) := (others => '0'); 
-    signal bit_count : integer range 0 to 7 := 0;
-    signal data_out : std_logic_vector(DATA_BITS_N - 1 downto 0) := (others => '0');
     signal tx_ready : std_logic := '0';
     signal tx_done : std_logic := '0';
 
@@ -34,14 +32,11 @@ architecture RTL of TX is
     signal baud_rate  : std_logic_vector(2 downto 0);
     signal parity     : std_logic_vector(1 downto 0);
 
-    signal baud_divider : integer := 0;
+    signal baud_divider : integer := baud_dividers(0);  -- Initialize to default 115200 baud
     signal baud_counter : integer := 0;           
     signal baud_tick : std_logic := '0';  
 
 begin 
-    -- Tri-state buffer for data bus
-    data_bus <= data_out when Rd = '1' else (others => 'Z');
-
     -- Process for Baud 
     p_baud : process(clk, rst)
     begin
@@ -61,15 +56,16 @@ begin
 
     -- Process to transmit data
     p_main: process(clk, rst)
+	    variable bit_count : integer range 0 to DATA_BITS_N - 1 := 0; 
+
     begin
         if rst = '0' then
-            tx_data_buf <= (others => '0');
+            tx_data_buf <= (others => 'Z');
             state <= IDLE;
             TxD <= '1';  
-            bit_count <= 0;
+            bit_count := 0;
             tx_busy <= '0';
         elsif rising_edge(clk) then 
-            if baud_tick = '1' then
                 case state is
                     when IDLE =>
                         tx_busy <= '0';
@@ -81,28 +77,36 @@ begin
                         end if;
 
                     when START =>
-                        tx_busy <= '1';  
-                        TxD <= '0';       
-                        bit_count <= 0;  
-                        state <= DATA;
+								if baud_tick = '1' then
+									tx_busy <= '1';  
+									TxD <= '0';       
+									bit_count := 0;  
+									state <= DATA;
+								end if;
+
 
                     when DATA =>
+						    if baud_tick = '1' then
                         if bit_count < DATA_BITS_N then
                             TxD <= tx_data_buf(bit_count); 
-                            bit_count <= bit_count + 1;
+                            bit_count := bit_count + 1;
                         else
                             state <= STOP;  
                         end if;
+							 end if;
+
 
                     when STOP =>
-                        TxD <= '1';       
-                        tx_busy <= '0';   
-                        state <= IDLE;
+								if baud_tick = '1' then
+									TxD <= '1';       
+									tx_busy <= '0';   
+									state <= IDLE;
+								end if;
+
 
                     when others =>
                         state <= IDLE;
                 end case;
-            end if;
         end if;
     end process p_main;
 
@@ -110,21 +114,24 @@ begin
     p_ctrl: process(clk, rst)
     begin
         if rst = '0' then
-            data_out <= (others => 'Z');
-            baud_rate <= "000";    -- Default baud rate (115200)
+				data_bus <= (others => 'Z');
+				data_bus <= (others => 'Z'); 
+				tx_data <= (others => 'Z');
+
+				baud_rate <= (others => '0'); 
+				parity <= (others => '0'); 
+				baud_divider <= DIV_115200;
         elsif rising_edge(clk) then
+		     data_bus <= (others => 'Z');  
             -- Read
             if Rd = '1' then
                 case addr is
                     when TX_STATUS_A =>
-                        data_out <= "0000000" & tx_busy; 
-                    when TX_CONFIG_A =>
-                        data_out <= (others => '0');      
+                        data_bus <= "0000000" & tx_busy; 
                     when others =>
-                        data_out <= (others => '0');     
+                        null;
                 end case;
             else
-                data_out <= (others => 'Z');  
             end if;
 
             -- Write
