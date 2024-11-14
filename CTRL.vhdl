@@ -83,7 +83,7 @@ begin
             
             when Finish =>
                 -- etter inialisering
-					 wr <= '0'-- slutt å skrive
+					 wr <= '0';-- slutt å skrive
                 databus <= (others => 'Z');
 					 RxData <= databus; 
 					 TxData <= databus;
