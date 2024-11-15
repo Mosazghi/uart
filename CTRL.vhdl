@@ -12,174 +12,163 @@ entity CTRL is port(
 	snd_led	: out 	std_logic;
 	wr 		: out 	std_logic;
 	rd 		: out 	std_logic;
-	addr 		: inout		std_logic_vector(2 downto 0)
+	addr 		: inout	std_logic_vector(2 downto 0)
 	);
 end entity;
 
 
 architecture RTL of CTRL is
-	type	 State_Type is (Start, Write_Tx_Config, Finish, Idle, Get, Send);
+	type	 State_Type is (Write_Rx_Config, Write_Tx_Config, Config_Finish, Idle, Get, Send);
 	signal State : State_Type;
 	
-	
-	--type startseq is (start, Write_Rx_Config, Write_Tx_Config, Finish);
-	--signal State_init : startseq := start;  -- Initialize to Idle
 
-	signal RxData 		: std_logic_vector(7 downto 0);
-	signal TxData 		: std_logic_vector(7 downto 0);
-	--signal addr			: std_logic_vector(2 downto 0);
-	signal led_state	: std_logic := '1'; 
-	signal counter		: integer := 0;
-	constant timer_period : integer := 50000000 / 20;  
-	
-	
-	
-	signal sndfor : std_logic := '1'; --- hjelpe signaler for å lage trykk knappen
-	signal sndnaa : std_logic := '0';
-	
-	
+	signal RxData 				: std_logic_vector(7 downto 0);
+	signal TxData 				: std_logic_vector(7 downto 0);
+	signal led_state			: std_logic	:= '1'; 
+	signal sndnaa 				: std_logic := '0';
+	signal sndfor				: std_logic := '0';
+	signal blink  				: std_logic := '0';
+	signal counter				: integer 	:= 0;
+	constant timer_period	: integer 	:= 50000000/20;
 	
 begin
 
-
-
-process (clk, rst) --- konfiguerer rx og tx ved start
+-- Blinking LED process
+ledBlink: process (clk)
 begin
-    if rst = '0' then
-        State <= start;
-		  
-        led_state <= '1'; ---- led på / default
+	if (rising_edge(clk)) then
+		if blink = '1' then
+			if counter < timer_period then
+				counter  <=	counter +1;
+			else 
+				counter <= 0;
+				led_state <= not led_state;
+			end if;
+		else
+			counter <= 0;
+			led_state <= '1';
+		end if;
+	end if;
+end process ledBlink;
+
+
+-- Main process
+main_proc: process (clk, rst)
+begin
+	if rst = '0' then
+		State <= Write_Rx_Config;
+
+		-- Setting default values
+      addr		<= (others => 'Z');
+      databus	<= (others => 'Z');
+      RxData	<= (others => '0');
+      TxData	<= (others => '0');
+      wr			<= '0';
+      rd			<= '0';
+		snd_led	<= '1'; -- LED on by default
+		sndnaa 	<= '0';
+		sndfor	<= '0';
+		blink 	<= '0';		  
         
-        -- start verdi
-        addr 		<= (others => '0');
-        databus	<= (others => 'Z');
-        RxData 	<= (others => '0');
-        TxData 	<= (others => '0');
-        wr <= '0';  -- reset write
-        rd <= '0';  -- reset read
-		  
-        
-    elsif rising_edge(clk) then
-        case State is
-        
-            when start =>
-                --konfigurerer rx
-                addr <= "100";  -- Addresse rx
-					 wr <= '1';			-- write
-					 databus <= ("00000" & addr);
-                RxData(2 downto 0) <= baud_sel;
-                RxData(4 downto 3) <= par_sel;
-                databus <= RxData;
-					 
-                State <= Write_Tx_Config;
+	elsif rising_edge(clk) then
+		databus <= (others => 'Z');
+		case State is
+			when Write_Rx_Config => -- Configuring Baudrate and Parity selection of Rx
+				wr 		<= '1'; 		-- Writing in progress indication
+            addr 		<= "100";	-- Address for Rx Configuration
+            databus	<= "000" & par_sel & baud_sel;
+            State		<= Write_Tx_Config;
             
-            when Write_Tx_Config =>
-                --konfigurerer tx
-                addr <= "000";  -- Addresse  Tx 
-                TxData(2 downto 0) <= baud_sel;
-                TxData(4 downto 3) <= par_sel;
-                databus <= TxData;
-                State <= Finish;
-            
-            when Finish =>
-                -- etter inialisering
-					 wr <= '0';-- slutt å skrive
-                databus <= (others => 'Z');
-					 RxData <= databus; 
-					 TxData <= databus;
-                addr <= (others => '0');
-                State <= Idle;
-                -- addresse bus er tatt til null
-		
-				when Idle =>	
-					addr <= "110";    ------- addresse for hvor den skal lese
-					rd <= '1'; -- lese	
-					-- Statusene skal er ikke tilgjengelig før neste klokke syklus, så inkluder enda en tilstand.
-					
-					---------------disse er ikke strengt tatt viktig for oppgaven
-					
-					-- Sjekker Rx status 
+			when Write_Tx_Config => -- Configuring Baudrate and Parity selection of Tx
+            addr 		<= "000"; 		-- Address for Rx Configuration
+            databus	<= "000" & par_sel & baud_sel;
+            State		<= Config_Finish;
+           
+			when Config_Finish =>
+				-- Setting default values
+				wr			<= '0';
+            databus	<= (others => 'Z');
+				addr		<= (others => 'Z');
+				RxData 	<= (others => '0'); 
+				TxData 	<= (others => '0');
+            State		<= Idle;
+				
+				
+			when Idle =>
+				if (databus = TxData) then 	-- Hindrer data som blir sendt ikke overføres inn i idle
+					databus	<= (others => 'Z');
+					TxData	<= (others => '0');
+				else
+					addr <= "110";
+					wr <= '0';	rd <= '1';
+
+					-- Parity Error
 					if (databus(3) = '1') then
-						-- Parity Error
-						state <= Idle;
-						end if;
-						
-					if (databus(2) = '1') then
-						-- Data Lost
-						
-						state <= Idle;
-						end if;
-						
-					if (databus(1) = '1') then
-						-- FIFO Full
-						--state <= Idle;
-						
-						State <= Get; ----------------- teste dette i testbench
-						end if;
-						
-						
-					if (databus(0) = '1') then
-						-- FIFO Empty
-						
-						state <= Idle; -- vente på data
-						
-						
-					else
 						state <= Idle;
 					end if;
+					
+					-- Data Lost
+					if (databus(2) = '1') then	
+						state <= Idle;
+					end if;
+					
+					-- FIFO Empty
+					if (databus(0) = '0') then
+						state <= Idle; 	-- Rx doesn't have data to transfer
+					end if;
+					
+					-- FIFO Full
+					if (databus(1) = '0') then
+						RxData	<= databus;
+						State		<= Get;
+						rd			<= '0';
+					else 
+						State <= Idle;
+					end if;
+				end if;
+				
+			when Get =>
+				addr <= "101"; -- Address for receiving data from Rx
+				rd <= '1';
+					
+				if (RxData /= databus) then		-- Waiting on data from Rx
 					rd <= '0';
-					
-				when Get =>
-					addr <= "101";		-- Setter addresse til å motta data fra Rx
-					rd <= '1'; -- lese
-					
-					if (RxData /= databus) then	-- Venter på dataen er mottat fra Rx
-						TxData <= databus;	-- Gjør dataen klar for sending til Tx
-						state <= Send;		-- Setter status til sending
-					else
-						State <= Get;
-					end if;	
-					rd <= '0';
-					
-					
-				when Send =>
-						addr <= "010";							-- Sjekker om Tx er klar til å motta data
-						rd <= '1'; -- lese
-						sndfor <= snd;
+					TxData <= databus;				-- Stores data from Rx on its own vector
+					RxData <= (others => '0');		-- Resets Rx vector
+					databus <= (others => 'Z');	-- Resets the databus
+					state <= Send;
+				else
+					State <= Get;
+				end if;	
 						
-						if (databus(0)= '1') then
-						-- BLINK LED
-						------------------------------------
-							if counter < timer_period then
-								counter  <=	counter +1;
-							else 
-								counter <= 0;
-								led_state <= not led_state;
-							end if;
-						else 
-							counter <= 0;
-							led_state <= '1';	
-						end if;
-						rd <= '0';
-						
-						snd_led <= led_state;
-						sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
-							-- TX BUSY
-						if (databus = "00000000" and sndfor = '0' and sndnaa ='1' ) then	-- Venter til Tx er klar og sendeknapp er initiert
-							addr <= "001";							-- Setter addresse for sending av data til Tx
-							wr <= '1'; -- skrive
-							databus <= TxData; 					-- Sender data til Tx
-							databus <= (others => 'Z');		-- Tilbakestiller databussen og gjøres klar til Idle status etter sending
-							wr <= '0';
-							state <= Idle;
-							
-						else
-							state <= Send;
-						
-						end if;
-						
-					
-				end case;		
-			END IF;
-		end process;
-end architecture;
+			when Send =>
+				addr <= "010";	-- Sets address to Tx status check
+				rd <= '1';
+				sndfor <= snd;
+				if (addr = "010") then
+					if (databus = "00000001") then	-- Blinks while Tx is busy, i.e sending data
+						blink <= '1';
+					else 
+						blink <= '0';
+					end if;
+				end if;
+				snd_led <= led_state;
+				
+				if (databus = "00000001" and sndfor = '1') then -- Holds button state while Tx is busy
+					sndnaa <= sndfor;
+				end if;
+				
+				if (databus = "ZZZZZZZZ" and (sndfor = '1' or sndnaa = '1')) then	-- Sends data to Tx when Tx is ready and send key is initialized
+					addr 		<= "001";	-- Address for data sending to Tx
+					rd 		<= '0';
+					wr 		<= '1';
+					databus	<= TxData;
+					state 	<= Idle;
+					sndnaa 	<= '0';
+				else
+					state 	<= Send;	
+				end if;
+			end case;		
+		end if;
+	end process main_proc;
+end architecture RTL;
