@@ -56,7 +56,7 @@ begin
 
     -- Process to transmit data
     p_main: process(clk, rst)
-	    variable bit_count : integer range 0 to DATA_BITS_N - 1 := 0; 
+	    variable bit_count : integer; 
 
     begin
         if rst = '0' then
@@ -87,7 +87,7 @@ begin
 
                     when DATA =>
 						    if baud_tick = '1' then
-                        if bit_count < DATA_BITS_N then
+                        if bit_count = DATA_BITS_N then
                             TxD <= tx_data_buf(bit_count); 
                             bit_count := bit_count + 1;
                         else
@@ -123,6 +123,7 @@ begin
 				baud_divider <= DIV_115200;
         elsif rising_edge(clk) then
 		     data_bus <= (others => 'Z');  
+			  
             -- Read
             if Rd = '1' then
                 case addr is

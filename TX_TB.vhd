@@ -75,7 +75,7 @@ stimulus : process
    procedure tb_reset is
    begin
        rst <= '0';
-       wait for CLK_PERIOD * 5;  -- Shortened reset time to 5 cycles
+       wait for CLK_PERIOD * 5;  
        rst <= '1';
        wait for CLK_PERIOD * 5;
    end tb_reset;
@@ -86,38 +86,34 @@ stimulus : process
         data_bus_driver <= data;       
         addr <= TX_DATA_A;             
         wr <= '1';                     
-        wait for CLK_PERIOD;           -- Shortened write time
+        wait for CLK_PERIOD;         
         wr <= '0';
         data_bus_driver <= (others => 'Z'); 
     end send_byte_via_tx;
 
-    -- Minimal verification of TxD 
-    procedure minimal_verify_txd(data : std_logic_vector(7 downto 0)) is
+    -- Procedure for verification of TxD 
+    procedure verify_txd(data : std_logic_vector(7 downto 0)) is
     begin
-        wait until TxD = '0'; -- Wait for start bit
+        wait until TxD = '0'; 
         wait for BIT_PERIOD / 2;
 
-        -- Only verify start bit, one middle data bit, and stop bit
         assert TxD = '0' report "Start bit mismatch" severity error;
         wait for BIT_PERIOD;
 
-        -- Verify a single data bit (e.g., bit 0)
         assert TxD = data(0) report "Mismatch at bit 0" severity error;
         wait for BIT_PERIOD;
 
-        -- Verify stop bit
         assert TxD = '1' report "Stop bit mismatch" severity error;
-    end minimal_verify_txd;
+    end verify_txd;
 
     begin
         tb_init;
-        tb_reset;  -- Ensure reset is applied correctly
+        tb_reset; 
 
-        -- Send a single byte to test transmission
         send_byte_via_tx("10101000"); 
         minimal_verify_txd("10101000");
 
-        wait for 5000 ns;  -- Shortened final wait time
+        wait for 5000 ns;  
         assert false report "Testbench finished" severity failure;
     end process;
 
