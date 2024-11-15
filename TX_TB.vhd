@@ -11,7 +11,7 @@ architecture SimulationModel of TX_tb is
   component TX
       port(
         clk : in std_logic;
-        rst : in std_logic;
+        rst : in std_logic;  
         Rd : in std_logic;
         Wr : in std_logic;
         addr : in std_logic_vector(2 downto 0);
@@ -20,64 +20,107 @@ architecture SimulationModel of TX_tb is
     );
   end component TX;
 		
-	 --Testbench Signals
+    -- Testbench Signals
     signal clk         : std_logic := '0';
-    signal rst_n       : std_logic := '0';
-    signal RxD         : std_logic := '1'; -- Idle state of UART line is '1'
+    signal rst         : std_logic := '0';  
+    signal TxD         : std_logic;
     signal data_bus    : std_logic_vector(7 downto 0);
+    signal data_bus_driver : std_logic_vector(7 downto 0) := (others => '0');
     signal addr        : std_logic_vector(2 downto 0);
     signal rd          : std_logic := '0';
     signal wr          : std_logic := '0';
-  
-    -- UART Parameters
-    signal baud_rate_sel : std_logic_vector(2 downto 0) := "100"; -- Set default to 115200 baud
-	 
-	 -- Clock 
+
     constant CLK_PERIOD : time := 20 ns;
     constant BIT_PERIOD : time := 8681 ns; -- 115200 baud
 	 
 begin
 
-  UUT: TX
-  port map(
-    clk => clk,
-    rst => rst,
-    Rd => Rd,
-    Wr => Wr,
-    addr => addr,
-    data_bus => data_bus,
-    TxD => TxD
-  );
-
-  data_bus <= data_bus_driver when Wr = '1' else (others => 'Z');
+    UUT: TX
+        port map(
+            clk => clk,
+            rst => rst,
+            Rd => rd,
+            Wr => wr,
+            addr => addr,
+            data_bus => data_bus,
+            TxD => TxD
+        );
   
-  --Clock generation
-  p_clk: process
+    -- Clock generation
+    p_clk : process
     begin
         clk <= '0';
         wait for CLK_PERIOD/2;
         clk <= '1';
         wait for CLK_PERIOD/2;
     end process;
-  
-  --Stimulus process
-  stimulus: process
-	 begin
-        rst <= '0';
-        wait for CLK_PERIOD * 10;
-        rst <= '1';
-        wait for CLK_PERIOD * 10;
 
-        wr <= '1';
-        addr <= "100"; 
-        data_bus <= "00000011"; 
-        wait for CLK_PERIOD ;
+    -- Data bus handling to avoid conflicts
+    data_bus <= data_bus_driver when wr = '1' or rd = '1' else (others => 'Z');
+
+    -- Stimulus process
+stimulus : process
+   procedure tb_init is
+   begin
+       rst <= '1';
+       wr <= '0';
+       rd <= '0';
+       addr <= "000";
+       data_bus <= (others => 'Z');
+       TxD <= '1';
+       wait until rising_edge(clk);
+   end tb_init;
+	
+   -- Reset procedure
+   procedure tb_reset is
+   begin
+       rst <= '0';
+       wait for CLK_PERIOD * 5;  -- Shortened reset time to 5 cycles
+       rst <= '1';
+       wait for CLK_PERIOD * 5;
+   end tb_reset;
+		
+    -- Procedure to send a byte
+    procedure send_byte_via_tx(data : std_logic_vector(7 downto 0)) is
+    begin
+        data_bus_driver <= data;       
+        addr <= TX_DATA_A;             
+        wr <= '1';                     
+        wait for CLK_PERIOD;           -- Shortened write time
         wr <= '0';
-        addr <= "ZZZ";
-        data_bus <= "ZZZZZZZZ";
+        data_bus_driver <= (others => 'Z'); 
+    end send_byte_via_tx;
 
-        wait for CLK_PERIOD * 10;
- 
-  end process stimulus;
+    -- Minimal verification of TxD 
+    procedure minimal_verify_txd(data : std_logic_vector(7 downto 0)) is
+    begin
+        wait until TxD = '0'; -- Wait for start bit
+        wait for BIT_PERIOD / 2;
+
+        -- Only verify start bit, one middle data bit, and stop bit
+        assert TxD = '0' report "Start bit mismatch" severity error;
+        wait for BIT_PERIOD;
+
+        -- Verify a single data bit (e.g., bit 0)
+        assert TxD = data(0) report "Mismatch at bit 0" severity error;
+        wait for BIT_PERIOD;
+
+        -- Verify stop bit
+        assert TxD = '1' report "Stop bit mismatch" severity error;
+    end minimal_verify_txd;
+
+    begin
+        tb_init;
+        tb_reset;  -- Ensure reset is applied correctly
+
+        -- Send a single byte to test transmission
+        send_byte_via_tx("10101000"); 
+        minimal_verify_txd("10101000");
+
+        wait for 5000 ns;  -- Shortened final wait time
+        assert false report "Testbench finished" severity failure;
+    end process;
 
 end architecture SimulationModel;
+
+
