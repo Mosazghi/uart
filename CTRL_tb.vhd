@@ -1,7 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.uart_library.all;
 
 entity CTRL_tb is
 end CTRL_tb;
@@ -26,38 +25,38 @@ architecture SimulationModel of CTRL_tb is
 	end component;
 
 -- Signals to connect to UUT
-	signal clk 	: std_logic := '0';
-	signal rst 	: std_logic := '0';
-	signal snd	: std_logic := '0';
+	signal clk 			: std_logic := '0';
+	signal rst 			: std_logic := '0';
+	signal snd			: std_logic := '0';
 	signal baud_sel	: std_logic_vector(2 downto 0) := "100";
 	signal par_sel 	: std_logic_vector(1 downto 0) := "10";
 	signal databus 	: std_logic_vector(7 downto 0) := (others => 'Z');
-	signal addr 	: std_logic_vector(2 downto 0);
+	signal addr 		: std_logic_vector(2 downto 0);
 	signal snd_led 	: std_logic;
-	signal wr 	: std_logic;
-	signal rd 	: std_logic;
+	signal wr 			: std_logic;
+	signal rd 			: std_logic;
 -- Clock period definition
 	constant clk_period : time := 10 ns;
 begin
 	uut: CTRL
 		port map(
-			clk => clk,
-			rst => rst,
-			snd => snd,
-			baud_sel => baud_sel,
-			par_sel => par_sel,
-			databus => databus,
-			addr => addr,
-			snd_led => snd_led,
-			wr => wr,
-			rd => rd
+			clk 		=> clk,
+			rst 		=> rst,
+			snd 		=> snd,
+			baud_sel	=> baud_sel,
+			par_sel 	=> par_sel,
+			databus 	=> databus,
+			addr 		=> addr,
+			snd_led 	=> snd_led,
+			wr 		=> wr,
+			rd 		=> rd
 		);
 		
 		clk_process: process
 		begin
 			while true loop
 				clk <= '0';
-				wait for clk_period / 2;
+				wait for clk_period/2;
 				clk <= '1';
 				wait for clk_period/2;
 			end loop;
@@ -71,82 +70,68 @@ begin
 			wait for clk_period;
 
 ----------------------- Sending first character
+			wait until (addr = "110"); -- Venter til idle 
 			wait for clk_period;
+			databus <= "11111101"; -- Simulerer RX er klar til å sende data
+
+			wait until (addr = "101"); -- Venter til RX sender data
+			wait for clk_period;
+			databus <= "01000001"; -- RX sender ASCII karakteren "A"
+
+			wait until (addr = "010"); -- Venter om TX er busy
+			wait for clk_period;
+			databus <= "00000001"; -- TX busy
+
+			wait for 10*clk_period;
+			databus <= (others => 'Z'); -- TX ikke lengre busy
+
+			wait for 2*clk_period;
 			snd <= '1';
-			wait for clk_period/2;
+			wait for clk_period/4;
+			snd <= '0';
+			wait for 2*clk_period;
 
-			wait until (addr = "110");
+----------------------- Sending Second character
+
+			wait until (addr = "110"); -- Venter til idle 
 			wait for clk_period;
-			databus <= "00000000"; ---endret busy til 00...00
+			databus <= "11111101"; -- Simulerer RX er klar til å sende data
 
-			wait until (addr = "101");
+			wait until (addr = "101"); -- Venter til RX sender data
 			wait for clk_period;
-			databus <= "01000001"; -- ASCII character "A"
+			databus <= "01000100"; -- RX sender ASCII karakteren "D"
 
-			wait until (addr = "010");
+			wait until (addr = "010"); -- Venter om TX er busy
 			wait for clk_period;
-			databus <= "00000001";	
-
-			wait for clk_period;
-			--snd <= '0';
-
-			wait for 10*clk_period;
-			databus <= (others => 'Z');
-
------------------------ Sending second character
+			databus <= "00000001"; -- TX busy
 			
-
-			wait for delay;
-			databus <= "00000000";
-			
-			wait for delay;
-			databus <= "01000100"; -- ASCII character "D"
-
-			wait for delay;
-			databus <= "00000001";
-
-			wait for 10*clk_period;
-			databus <= (others => 'Z');
-
------------------------ Sending third character
-			wait for clk_period;
+			wait for 5*clk_period;
 			snd <= '1';
-			wait for clk_period/2;
-
-			wait for delay;
-			databus <= "00000000";
-			
-			wait for delay;
-			databus <= "01000001"; -- ASCII character "A"
-
-			wait for delay;
-			databus <= "00000001";
-
+			wait for clk_period/4;
+			snd <= '0';
 			wait for 10*clk_period;
-			databus <= (others => 'Z');
-			wait for clk_period;
-			--snd <= '0';
+			databus <= (others => 'Z'); -- TX ikke lengre busy
+			
+----------------------- Sending Third character
 
------------------------ Sending fourth character
+			wait until (addr = "110"); -- Venter til idle 
 			wait for clk_period;
+			databus <= "11111101"; -- Simulerer RX er klar til å sende data
+
+			wait until (addr = "101"); -- Venter til RX sender data
+			wait for clk_period;
+			databus <= "01011010"; -- RX sender ASCII karakteren "Z"
+
+			wait until (addr = "010"); -- Venter om TX er busy
+			wait for clk_period;
+			databus <= "00000001"; -- TX busy
+			
+			wait for 5*clk_period;
 			snd <= '1';
-			wait for clk_period/2;
-
-			wait for delay;
-			databus <= "00000000";
-			
-			wait for delay;
-			databus <= "01001101"; -- ASCII character "M"
-
-			wait for delay;
-			databus <= "00000001";
-
+			wait for clk_period/4;
+			snd <= '0';
 			wait for 10*clk_period;
-			databus <= (others => 'Z');
-			wait for clk_period;
-			--snd <= '0';
-			
+			databus <= (others => 'Z'); -- TX ikke lengre busy
 			wait;
 		end process;
 end architecture SimulationModel;
-
