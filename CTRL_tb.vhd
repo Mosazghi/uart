@@ -37,7 +37,7 @@ architecture SimulationModel of CTRL_tb is
 	signal wr 	: std_logic;
 	signal rd 	: std_logic;
 -- Clock period definition
-	constant clk_period : time := 10 ns;
+	constant clk_period : time := 20 ns;
 begin
 	uut: CTRL
 		port map(
@@ -64,16 +64,30 @@ begin
 		end process;
 
 		stim_proc: process
+
+        -- Initialization procedure
+        procedure tb_init is
+        begin
+            wr <= '0';
+            rd <= '0';
+            addr <= "000";
+            baud_sel <= "100";
+            par_sel <= "10";
+            snd <= '1';
+            snd_led <= '0';
+            databus <= (others => 'Z');
+            wait until rising_edge(clk);
+        end tb_init;
 		begin
 			rst <= '0';
-			wait for delay;
+			wait for clk_period;
 			rst <= '1';
 			wait for clk_period;
 
 ----------------------- Sending first character
-			wait for clk_period;
-			snd <= '1';
-			wait for clk_period/2;
+			-- wait for clk_period;
+			-- snd <= '1';
+			-- wait for clk_period/2;
 
 			wait until (addr = "110");
 			wait for clk_period;
@@ -146,7 +160,7 @@ begin
 			wait for clk_period;
 			--snd <= '0';
 			
-			wait;
+            wait;
 		end process;
 end architecture SimulationModel;
 

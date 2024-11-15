@@ -10,23 +10,23 @@ z2
 cModel Technology
 dC:/intelFPGA/20.1
 Ectrl
-Z0 w1730848176
+Z0 w1731663503
 Z1 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z3 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
-!i122 721
+!i122 843
 Z4 d/home/mosa/NTNU/IELEG2113/uart
 Z5 8/home/mosa/NTNU/IELEG2113/uart/CTRL.vhdl
 Z6 F/home/mosa/NTNU/IELEG2113/uart/CTRL.vhdl
 l0
-L5 1
-V60A83JLX1IcI3Ml12AVX42
-!s100 n:nkhDoBnK?k5GN4b>kJ=0
+L6 1
+VC[L<]>g_=R4]5c86Sb0mT2
+!s100 @:lT6h0m8od_zXYGD3E3j3
 Z7 OV;C;2020.1;71
 32
-Z8 !s110 1730976031
+Z8 !s110 1731663611
 !i10b 1
-Z9 !s108 1730976031.000000
+Z9 !s108 1731663611.000000
 Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/CTRL.vhdl|
 Z11 !s107 /home/mosa/NTNU/IELEG2113/uart/CTRL.vhdl|
 !i113 1
@@ -36,32 +36,32 @@ Artl
 R1
 R2
 R3
-DEx4 work 4 ctrl 0 22 60A83JLX1IcI3Ml12AVX42
-!i122 456
-l51
-L20 154
-VaZb5WSDG:koj8U=gIW^9@2
-!s100 0mMBz7fz4N]d<_TQV1oFm3
+DEx4 work 4 ctrl 0 22 C[L<]>g_=R4]5c86Sb0mT2
+!i122 843
+l46
+L21 166
+VA5kGY<3e2?:53ok`?B0<O0
+!s100 [jO5BMkfX;:QB5ni01RF23
 R7
 32
-!s110 1730847975
+R8
 !i10b 1
-!s108 1730847975.000000
+R9
 R10
 R11
 !i113 1
 R12
 R13
 Ectrl_tb
-w1730451059
-Z14 DPx4 work 12 uart_library 0 22 4KifZYYA<Ph3HJ6T04jd>3
+Z14 w1731663608
+Z15 DPx4 work 12 uart_library 0 22 4KifZYYA<Ph3HJ6T04jd>3
 R1
 R2
 R3
-!i122 722
+!i122 844
 R4
-8/home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd
-F/home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd
+Z16 8/home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd
+Z17 F/home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd
 l0
 L6 1
 VfU9Jo@OP=8z7QZY=E?YaZ0
@@ -71,145 +71,166 @@ R7
 R8
 !i10b 1
 R9
-!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd|
-!s107 /home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd|
+Z18 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd|
+Z19 !s107 /home/mosa/NTNU/IELEG2113/uart/CTRL_tb.vhd|
+!i113 1
+R12
+R13
+Asimulationmodel
+R15
+R1
+R2
+R3
+Z20 DEx4 work 7 ctrl_tb 0 22 fU9Jo@OP=8z7QZY=E?YaZ0
+!i122 844
+l41
+L9 157
+V9fM8U8o02=1K]6cm8o5N:3
+!s100 l3eYLKG7z4okW6WY[3GfD1
+R7
+32
+R8
+!i10b 1
+R9
+R18
+R19
 !i113 1
 R12
 R13
 Efifo
-Z15 w1731576070
+Z21 w1731660926
 R2
 R3
-!i122 801
+!i122 841
 R4
-Z16 8/home/mosa/NTNU/IELEG2113/uart/FIFO.vhd
-Z17 F/home/mosa/NTNU/IELEG2113/uart/FIFO.vhd
+Z22 8/home/mosa/NTNU/IELEG2113/uart/FIFO.vhd
+Z23 F/home/mosa/NTNU/IELEG2113/uart/FIFO.vhd
 l0
 L43 1
 VU`Sm=?RD=_O3X>eOzVZ^H0
 !s100 jC_lPYQfiaDFNRneS12Fa3
 R7
 32
-Z18 !s110 1731577570
+Z24 !s110 1731663610
 !i10b 1
-Z19 !s108 1731577570.000000
-Z20 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/FIFO.vhd|
-Z21 !s107 /home/mosa/NTNU/IELEG2113/uart/FIFO.vhd|
+Z25 !s108 1731663610.000000
+Z26 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/FIFO.vhd|
+Z27 !s107 /home/mosa/NTNU/IELEG2113/uart/FIFO.vhd|
 !i113 1
 R12
 R13
 Asyn
 R2
 R3
-Z22 DEx4 work 4 fifo 0 22 U`Sm=?RD=_O3X>eOzVZ^H0
-!i122 801
+Z28 DEx4 work 4 fifo 0 22 U`Sm=?RD=_O3X>eOzVZ^H0
+!i122 841
 l89
 L57 63
 V_DD6VC0<Y_D0G=SBKXYP<1
 !s100 7PEhfAB45RhKOXHm51e3h0
 R7
 32
-R18
+R24
 !i10b 1
-R19
-R20
-R21
+R25
+R26
+R27
 !i113 1
 R12
 R13
 Erx
-Z23 w1731576822
-Z24 DPx4 work 12 uart_library 0 22 NUP8?APK63=>`eglMlMKc0
+Z29 w1731659838
+R15
 R1
 R2
 R3
-!i122 799
+!i122 839
 R4
-Z25 8/home/mosa/NTNU/IELEG2113/uart/RX.vhdl
-Z26 F/home/mosa/NTNU/IELEG2113/uart/RX.vhdl
+Z30 8/home/mosa/NTNU/IELEG2113/uart/RX.vhdl
+Z31 F/home/mosa/NTNU/IELEG2113/uart/RX.vhdl
 l0
 L6 1
 V9ULYNHfDZXDaemV>9onS[1
 !s100 XLM>nEX?I1h9ogE6N=6:63
 R7
 32
-R18
+R24
 !i10b 1
-R19
-Z27 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/RX.vhdl|
-Z28 !s107 /home/mosa/NTNU/IELEG2113/uart/RX.vhdl|
+R25
+Z32 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/RX.vhdl|
+Z33 !s107 /home/mosa/NTNU/IELEG2113/uart/RX.vhdl|
 !i113 1
 R12
 R13
 Artl
-R22
-R24
+R28
+R15
 R1
 R2
 R3
 DEx4 work 2 rx 0 22 9ULYNHfDZXDaemV>9onS[1
-!i122 799
+!i122 839
 l81
 L20 238
 V^6SUO`BBaeD1L4j?I[4lk0
 !s100 PC];KhmSAB9NmSh9N:2EY2
 R7
 32
-R18
+R24
 !i10b 1
-R19
-R27
-R28
+R25
+R32
+R33
 !i113 1
 R12
 R13
 Erx_tb
-Z29 w1731577564
-R24
+Z34 w1731577564
+R15
 R1
 R2
 R3
-!i122 800
+!i122 840
 R4
-Z30 8/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
-Z31 F/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+Z35 8/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
+Z36 F/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl
 l0
 L6 1
 V]biWWZlgWLZIO:XWOY1^C1
 !s100 2T[5KNG^FNRK4GTDF57WA2
 R7
 32
-R18
+R24
 !i10b 1
-R19
-Z32 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl|
-Z33 !s107 /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl|
+R25
+Z37 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl|
+Z38 !s107 /home/mosa/NTNU/IELEG2113/uart/RX_TB.vhdl|
 !i113 1
 R12
 R13
 Abehavior
-R24
+R15
 R1
 R2
 R3
 DEx4 work 5 rx_tb 0 22 ]biWWZlgWLZIO:XWOY1^C1
-!i122 800
+!i122 840
 l42
 L9 198
 VZaDFRaH1>F=OTn0B11Qn=1
 !s100 HJk6eIoS97gGIic^5]_mB3
 R7
 32
-R18
+R24
 !i10b 1
-R19
-R32
-R33
+R25
+R37
+R38
 !i113 1
 R12
 R13
 Asimulationmodel
-R14
+R15
 R1
 R2
 R3
@@ -224,8 +245,8 @@ R7
 !s110 1730974705
 !i10b 1
 !s108 1730974705.000000
-R32
-R33
+R37
+R38
 !i113 1
 R12
 R13
@@ -234,42 +255,42 @@ Puart_library
 R1
 R2
 R3
-!i122 802
-Z34 w1731575851
+!i122 842
+Z39 w1731580047
 R4
-Z35 8/home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl
-Z36 F/home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl
+Z40 8/home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl
+Z41 F/home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl
 l0
 L5 1
-VNUP8?APK63=>`eglMlMKc0
-!s100 o:65_:EFH5c5NLeOmz<=Y2
+V4KifZYYA<Ph3HJ6T04jd>3
+!s100 IXMMFbBP[N;NeOYQNW=j:1
 R7
 32
-R18
+R8
 !i10b 1
-R19
-Z37 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl|
-Z38 !s107 /home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl|
+R9
+Z42 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|/home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl|
+Z43 !s107 /home/mosa/NTNU/IELEG2113/uart/LIBRARY.vhdl|
 !i113 1
 R12
 R13
 Bbody
-R24
+R15
 R1
 R2
 R3
-!i122 802
+!i122 842
 l0
-Z39 L71 1
-Z40 V<84KB@63]^]9?A>]fG:001
-Z41 !s100 Wl1K11Z_ENJNY>h16LPm03
+L71 1
+V<84KB@63]^]9?A>]fG:001
+!s100 Wl1K11Z_ENJNY>h16LPm03
 R7
 32
-R18
+R8
 !i10b 1
-R19
-R37
-R38
+R9
+R42
+R43
 !i113 1
 R12
 R13
