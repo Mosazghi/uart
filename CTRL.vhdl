@@ -34,8 +34,8 @@ architecture RTL of CTRL is
 	
 	
 	
-	signal sndfor : std_logic := '1'; --- hjelpe signaler for å lage trykk knappen
-	signal sndnaa : std_logic := '0';
+	signal sndfor : std_logic ; --- hjelpe signaler for å lage trykk knappen
+	signal sndnaa : std_logic ;
 	signal blink  : std_logic;
 	
 	
@@ -100,8 +100,8 @@ begin
                 -- etter inialisering
 					 wr <= '0';-- slutt å skrive
                 databus <= (others => 'Z');
-					 RxData <= (others => '0'); 
-					 TxData <= (others => '0');
+					 RxData <= (others => 'Z'); 
+					 TxData <= (others => 'Z');
                 addr <= (others => '1');
                 State <= Idle;
                 -- addresse bus er tatt til ubrukt adresse
@@ -133,7 +133,7 @@ begin
 						state <= Idle; -- vente på data
 					end if;
 */
-					if (databus(1) = '1') then
+					if (databus(1) = '0') then
 						-- FIFO Full
 						--state <= Idle;
 						RxData <= databus;
@@ -161,7 +161,7 @@ begin
 				when Send =>
 						addr <= "010";							-- Sjekker om Tx er klar til å motta data
 						rd <= '1'; -- lese
-						sndnaa <= snd;
+						--sndnaa <= snd;
 						if (addr = "010") then
 							if (databus = "00000001") then
 								blink <= '1';
@@ -169,10 +169,12 @@ begin
 								blink <= '0';
 							end if;
 						end if;
-						snd_led <= led_state;
-						--sndnaa <= sndfor; ------ logikk for at karakter sender kun en gang ved trykk av en knapp
+						--sndnaa <= sndfor;    -- Store the last state in sndaa
+           					--sndfor <= snd;  ------ logikk for at karakter sender kun en gang ved trykk av en knapp
 							-- TX BUSY
-						if (databus = "ZZZZZZZZ" and snd = '1') then	-- Venter til Tx er klar og sendeknapp er initiert
+						--sndnaa = '0' and sndfor ='1'
+						
+						if (databus = "ZZZZZZZZ" and snd='1') then	-- Venter til Tx er klar og sendeknapp er initiert
 							addr <= "001";							-- Setter addresse for sending av data til Tx
 							rd <= '0';
 							wr <= '1'; -- skrive

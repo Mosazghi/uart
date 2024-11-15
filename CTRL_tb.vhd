@@ -70,9 +70,13 @@ begin
 			wait for clk_period;
 
 ----------------------- Sending first character
+			wait for clk_period;
+			snd <= '1';
+			wait for clk_period/2;
+
 			wait until (addr = "110");
 			wait for clk_period;
-			databus <= "00000010";
+			databus <= "00000000"; ---endret busy til 00...00
 
 			wait until (addr = "101");
 			wait for clk_period;
@@ -80,18 +84,19 @@ begin
 
 			wait until (addr = "010");
 			wait for clk_period;
-			databus <= "00000001";
+			databus <= "00000001";	
+
+			wait for clk_period;
+			--snd <= '0';
 
 			wait for 10*clk_period;
 			databus <= (others => 'Z');
 
 ----------------------- Sending second character
-			wait for clk_period;
-			snd <= '1';
-			wait for clk_period/2;
+			
 
 			wait for delay;
-			databus <= "00000010";
+			databus <= "00000000";
 			
 			wait for delay;
 			databus <= "01000100"; -- ASCII character "D"
@@ -108,7 +113,7 @@ begin
 			wait for clk_period/2;
 
 			wait for delay;
-			databus <= "00000010";
+			databus <= "00000000";
 			
 			wait for delay;
 			databus <= "01000001"; -- ASCII character "A"
@@ -118,6 +123,8 @@ begin
 
 			wait for 10*clk_period;
 			databus <= (others => 'Z');
+			wait for clk_period;
+			--snd <= '0';
 
 ----------------------- Sending fourth character
 			wait for clk_period;
@@ -125,7 +132,7 @@ begin
 			wait for clk_period/2;
 
 			wait for delay;
-			databus <= "00000010";
+			databus <= "00000000";
 			
 			wait for delay;
 			databus <= "01001101"; -- ASCII character "M"
@@ -135,181 +142,10 @@ begin
 
 			wait for 10*clk_period;
 			databus <= (others => 'Z');
-
+			wait for clk_period;
+			--snd <= '0';
 			
 			wait;
 		end process;
 end architecture SimulationModel;
 
-/* GAMMAL TB
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use work.uart_library.all;
-
-entity CTRL_tb is
-end CTRL_tb;
-
-architecture SimulationModel of CTRL_tb is 
-    constant CLK_FREQ_HZ : integer := 50000000;  
-    constant CLK_PER : time := 20 ns; -- 50MHz
-    constant delay : time := 100 ns;
-    
-    component CTRL
-        port(
-            clk 		: in 		std_logic;
-            rst 		: in 		std_logic; 
-            snd 		: in 		std_logic;
-            baud_sel	: in 		std_logic_vector(2 downto 0);
-            par_sel 	: in 		std_logic_vector(1 downto 0);
-            databus 	: inout 	std_logic_vector(7 downto 0);
-				addr 		: inout 	std_logic_vector(2 downto 0);
-            snd_led 	: out 	std_logic;
-            wr 		: out 	std_logic;
-            rd 		: out 	std_logic
-        );
-    end component CTRL;
-    
-    -- Signals to connect to UUT
-    signal clk 		: std_logic := '0';
-    signal rst 		: std_logic := '0';
-    signal snd 		: std_logic := '0';
-    signal baud_sel 	: std_logic_vector(2 downto 0) := (others => '0');
-    signal par_sel 	: std_logic_vector(1 downto 0) := (others => '0');
-    signal databus 	: std_logic_vector(7 downto 0) := (others => 'Z');
-    signal snd_led 	: std_logic;
-    signal wr 			: std_logic;
-    signal rd 			: std_logic;
-    signal addr 		: std_logic_vector(2 downto 0);
-
-    -- Clock period definition
-    constant clk_period : time := 10 ns;
-
-begin
-
-    -- Instantiate the Unit Under Test (UUT)
-    uut: CTRL
-        port map (
-            clk 		=> clk,
-            rst 		=> rst,
-            snd 		=> snd,
-            baud_sel => baud_sel,
-            par_sel 	=> par_sel,
-            databus 	=> databus,
-            snd_led 	=> snd_led,
-            wr 		=> wr,
-            rd 		=> rd,
-            addr 		=> addr
-        );
-
-    -- Clock process definitions
-    clk_process : process
-    begin
-        clk <= '0';
-        wait for clk_period/2;
-        clk <= '1';
-        wait for clk_period/2;
-    end process;
-
-	 
-    startup_process: process
-    begin
-        databus <= (others => 'Z');
-        baud_sel <= "100";
-        par_sel <= "10";
-        
-        wait until rst = '0';
-        wait until rising_edge(clk);
-        
-        case addr is 
-            when "000" =>
-                assert databus = "00010100" report "TX config -- Wrong parity- and baud selection" severity error;
-            when "001" =>
-                assert databus = "01011010" report "TX module should expect 'Z' character (01011010)" severity error;
-            when "010" =>
-                databus <= "00000001"; -- TX module busy
-            when "100" =>
-                assert databus = "00010100" report "RX config -- Wrong parity- and baud selection" severity error;
-            when "101" =>
-                databus <= "01011010"; -- Character 'Z'
-            when "110" =>
-                databus <= "00000010"; -- FIFO Full
-                assert addr = "101" report "CTRL module should request data transfer" severity error;
-				when others =>
-					assert databus = "ZZZZZZZZ" report "Databus is not in tri-state mode" severity error;
-					databus <= "ZZZZZZZZ";
-        end case;
-    end process;
-    
-    -- Stimulus process
-    stim_proc: process
-    begin
-        -- hold reset state for 100 ns.
-        rst <= '1';
-        wait for delay;
-        rst <= '0';
-
-        wait;
-    end process;
-	 
-/	 
-	 send_process: process
-		  variable counter : integer := 0;
-    begin
-        -- Initialize
-        snd <= '0';
-        databus <= (others => 'Z');    -- Release bus
-        wait for clk_period * 2;
-
-        -- Drive UUT to Send state
-        state <= Send;
-        addr <= "010";                 -- Expecting address to check if Tx is ready
-        RoW('0');                    -- Setting read mode
-
-        -- Test if Tx is ready: databus(0) = '1' to simulate ready state
-        databus <= "00000001";
-        wait for clk_period;
-
-        -- Test LED Blink Logic
-        assert (led_state = '1') report "LED should be on initially" severity error;
-        for i in 1 to timer_period * 2 loop
-            wait until rising_edge(clk);
-            if counter < timer_period then
-                counter := counter + 1;
-            else
-                counter := 0;
-                assert (led_state = not led_state) report "LED did not toggle after timer period" severity error;
-            end if;
-        end loop;
-
-        -- Test single send trigger
-        snd <= '1';
-        wait until rising_edge(clk);
-        assert (snd_led = led_state) report "snd_led did not match led_state after counter reset" severity error;
-        
-        -- Simulate Tx Ready to Send
-        databus <= "00000000";          -- Tx ready signal
-        snd <= '0';                     -- Button released
-        wait until rising_edge(clk);
-
-        -- Verify state transition to Idle and bus reset
-        wait until rising_edge(clk);
-        assert (state = Idle) report "State did not transition to Idle" severity error;
-        assert (addr = "001") report "Address was not set correctly for Tx data send" severity error;
-        assert (wr = '1') report " was not set to write for Tx data send" severity error;
-        assert (databus = (others => 'Z')) report "Databus was not reset to high impedance after sending" severity error;
-
-        -- Simulation End
-        report "Send test completed successfully" severity note;
-        wait;
-    end process;
-		
-		  
-
-        -- Add more stimulus as needed
-
-    
-/
-
-end architecture SimulationModel;
-*/
